@@ -1,0 +1,34 @@
+[package]
+name = "titanium_gui"
+version = "1.0.0-alpha.1"
+edition = "2021"
+
+[dependencies.titaniumutils]
+package = "titanium_utils"
+path = "../utils"
+
+[dependencies.titaniumkeybinds]
+package = "titanium_keybinds"
+path = "../keybinds"
+
+[dependencies.titaniumcore]
+package = "titanium_core"
+path = "../core"
+
+[dependencies.druid]
+version = "0.8.3"
+features = [
+    "image-all"
+]
+
+# Windows Specific items
+[target.'cfg(windows)'.build-dependencies]
+winres = "0.1"
+
+[build-dependencies.titaniumutils]
+package = "titanium_utils"
+path = "../utils"
+
+[package.metadata.winres]
+OriginalFilename = "Titanium"
+FileDescription = "Titanium"

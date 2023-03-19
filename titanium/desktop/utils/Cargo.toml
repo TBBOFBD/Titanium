@@ -1,0 +1,16 @@
+[package]
+name = "titanium_utils"
+version = "1.0.0-alpha.1"
+edition = "2021"
+
+[dependencies.libassets]
+package = "titanium_assets"
+path = "../assets"
+optional = true
+
+[features]
+default = ["full"]
+full = ["assets", "macros"]
+
+macros = []
+assets = ["dep:libassets"]

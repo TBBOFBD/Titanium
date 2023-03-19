@@ -1,0 +1,42 @@
+[package]
+name = "titanium"
+version = "1.0.0-alpha.1"
+edition = "2021"
+
+[lib]
+path = "titanium/lib.rs"
+
+[workspace]
+members = [
+    "titanium/desktop",
+    "titanium/web",
+    "examples/desktop",
+    "examples/web",
+]
+
+[dependencies.titaniumutils]
+path = "./titanium/desktop/utils"
+package = "titanium_utils"
+default-features = false
+features = ["macros"]
+
+[dependencies.titaniumdesktop]
+path = "./titanium/desktop"
+package = "titanium_desktop"
+optional = true
+
+[dependencies.titaniumweb]
+path = "./titanium/web"
+package = "titanium_web"
+optional = true
+
+[features]
+default = ["full"]
+full = ["desktop-full", "web-full"]
+
+desktop = ["titaniumdesktop"]
+desktop-gui = ["desktop", "titaniumdesktop/gui"]
+desktop-full = ["desktop", "desktop-gui", "titaniumdesktop/full"]
+
+web = ["titaniumweb"]
+web-full = ["web", "titaniumweb/full"]

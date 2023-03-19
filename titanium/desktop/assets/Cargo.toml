@@ -1,0 +1,7 @@
+[package]
+name = "titanium_assets"
+version = "1.0.0-alpha.1"
+edition = "2021"
+
+[lib]
+path = "lib.rs"

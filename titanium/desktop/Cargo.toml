@@ -1,0 +1,22 @@
+[package]
+name = "titanium_desktop"
+version = "1.0.0-alpha.1"
+edition = "2021"
+
+[lib]
+path = "lib.rs"
+
+[dependencies.titaniumcore]
+package = "titanium_core"
+path = "./core"
+
+[dependencies.titaniumgui]
+package = "titanium_gui"
+path = "./gui"
+optional = true
+
+[features]
+default = []
+full = ["gui"]
+
+gui = ["dep:titaniumgui"]

@@ -1,0 +1,22 @@
+[package]
+name = "titanium_core"
+version = "1.0.0-alpha.1"
+edition = "2021"
+
+[dependencies.titaniumutils]
+package = "titanium_utils"
+default-features = false
+path = "../utils"
+features = [
+    "macros"
+]
+
+[target.'cfg(windows)'.dependencies.winapi]
+version = "0.3.9"
+features = [
+    "handleapi",
+    "memoryapi",
+    "winuser",
+    "tlhelp32",
+    "processthreadsapi"
+]
