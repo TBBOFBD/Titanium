@@ -1,10 +1,5 @@
 //! Keybinds for Titanium
 
-titaniumutils::allow!(
-    target_os = "windows",
-    "This module is only available on Windows"
-);
-
 #[doc(hidden)]
 mod common;
 #[doc(hidden)]
@@ -15,3 +10,7 @@ pub use crate::public::*;
 mod windows;
 #[cfg(target_os = "windows")]
 pub use crate::windows::*;
+#[cfg(target_os = "linux")]
+mod linux;
+#[cfg(target_os = "linux")]
+pub use crate::linux::*;
