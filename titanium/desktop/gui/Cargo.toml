@@ -7,7 +7,7 @@ edition = "2021"
 package = "titanium_utils"
 path = "../utils"
 
-[dependencies.titaniumkeybinds]
+[target.'cfg(windows)'.dependencies.titaniumkeybinds]
 package = "titanium_keybinds"
 path = "../keybinds"
 
