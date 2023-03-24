@@ -28,9 +28,9 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
-          toolchain: stable
-          components: clippy
-          override: true
+          toolchain: nightly
+      - name: Install GTK3
+        run: sudo apt-get install libgtk-3-dev -y
       - run: cargo doc --workspace --no-deps
       - uses: "finnp/create-file-action@master"
         env:
