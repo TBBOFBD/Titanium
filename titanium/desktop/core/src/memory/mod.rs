@@ -1,9 +1,6 @@
-pub type MemResult<T> = std::io::Result<T>;
+#![cfg(target_os = "windows")]
 
-titaniumutils::allow!(
-    target_os = "windows",
-    "This module is only available on Windows"
-);
+pub type MemResult<T> = std::io::Result<T>;
 
 mod raw;
 
