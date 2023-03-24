@@ -1,4 +1,5 @@
 pub mod memory;
+#[cfg(target_os = "windows")]
 pub mod math;
 
 
