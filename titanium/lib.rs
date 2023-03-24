@@ -1,16 +1,39 @@
-//! <p align="center"><img src="https://i.imgur.com/hnyLrub.png"alt="titanium-logo"style="width:40%;height:5%px;object-fit:cover;object-position:center -10px""/></p><h1 align="center"></h1><p align="center"style="">A rust library for writing video game "utilities"</p><div align="center"><a><img src="https://img.shields.io/github/license/AtomicGamer9523/Titanium?label=License&color=blue"></a><br><a href="https://www.github.com/AtomicGamer9523"><img src="https://img.shields.io/github/followers/atomicgamer9523?label=AtomicGamer9523%20(Me)&style=social"/></a></div>
+//! <p align="center"><img src="https://i.imgur.com/hnyLrub.png"alt="titanium-logo"style="width:40%;height:5%px;object-fit:cover;object-position:center -10px""/></p><h1 align="center"></h1><p align="center"style="">A rust library for writing video game "utilities"</p>
 //! 
-//! <h1><b>Example</b>:</h1>
+//! <h1><b>Examples</b>:</h1>
 //! 
-//! ```rust,no_run
-//! fn main() {
-//!    println!("Hello, world!");
-//! }
-//! ```
 
 #![deny(missing_docs)]
+#![deny(unsafe_code)]
 
-/// Module for desktop utilities
+/// <p align="center"><img src="https://i.imgur.com/hnyLrub.png"alt="titanium-logo"style="width:40%;height:5%px;object-fit:cover;object-position:center -10px""/></p><h1 align="center"></h1><p align="center"style="">A rust library for writing video game "utilities"</p>
+/// 
+/// <h1><b>Example</b>:</h1>
+/// 
+/// ```rust
+/// use titanium::web;
+/// use web::prelude::*;
+/// 
+/// #[titanium::main]
+/// async fn main() -> web::Result<()> {
+///     let mut app = web::new_server();
+///     app.at("/")
+///         .with(web::WebSocket::new(|_, mut stream| async move {
+///             while let Some(Ok(web::Message::Text(input))) = stream.next().await {
+///                 println!("data: {}", &input);
+///                 stream
+///                     .send_string(input)
+///                     .await?;
+///             }
+///             Ok(())
+///         }))
+///         .get(web::root_page_endpoint);
+///     web::serve_internals(&mut app);
+///     web::serve_client_code(&mut app, include_str!("./client.js"));
+///     app.listen("127.0.0.1:8080").await?;
+///     Ok(())
+/// }
+/// ```
 #[cfg(feature = "web")]
 pub mod web {
     pub use titaniumweb::*;
@@ -20,4 +43,16 @@ pub mod web {
 #[cfg(feature = "desktop")]
 pub mod desktop {
     pub use titaniumdesktop::*;
+}
+
+#[cfg(feature = "macros")]
+pub use titaniummacros::*;
+
+/// Internals mostly used by macros
+#[doc(hidden)]
+pub mod __internals__ {
+    /// Runs the main function
+    #[doc(hidden)]
+    #[cfg(feature = "macros")]
+    pub use async_std::task::block_on as run_main;
 }

@@ -1,11 +1,11 @@
 /**
- * # Titanium API
- * ##
- * @module api
+ * @author AtomicGamer9523
+ * @license MIT
+ * @version 1.0.0-alpha.2
+ * @description Titanium Web API Library
 */
 
 // deno-lint-ignore-file
-
 
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
@@ -14,196 +14,232 @@
 })(this, (function (exports) { exports.__private__ = {}; 'use strict';
 	class TitaniumConnectError extends Error {
 		constructor(c) {
-			super("Failed to connect to " +
+			super(
+				"Failed to connect to " +
 				c.connection.secure ? "wss" : "ws" +
 				"" +
 				c.connection.host +
 				":" +
 				c.connection.port +
-			"!");
+				"!"
+			);
 			this.name = "TitaniumConnectError";
 		}
 	}
-	let __private__;(function(__private__){
-		class JSLib {
-			#code;
-			constructor(code) {
-				this.#code = code;
+	class JSLib {
+		#code;
+		constructor(code) {
+			this.#code = code;
+		}
+		getCode() {
+			return this.#code;
+		}
+		inject() {
+			try {
+				eval(this.#code);
+			} catch (e) {
+				console.error("Error injecting JSLIB");
+				console.error(e);
 			}
-			getCode() {
-				return this.#code;
-			}
-			inject() {
-				try {
-					eval(this.#code);
-				}
-				catch (e) {
-					console.error("Error injecting JSLIB");
-					console.error(e);
-				}
-			}
-		}__private__.JSLib = JSLib;
-		class Option {
-			#valid;
-			#value;
-			static of(value) {
-				if (value === undefined)
-					throw new TypeError("Value cannot be undefined");
-				return new Option(value);
-			}
-			static ofNullable(value) {
-				return new Option(value);
-			}
-			static empty() {
-				return new Option(undefined);
-			}
-			constructor(value) {
-				if (value === undefined) this.#valid = false;
-				else this.#valid = true;
-				this.#value = value;
-			}
-			isPresent() {
-				return this.#valid && this.#value !== undefined;
-			}
-			getStrict() {
-				if (this.#value === undefined) throw new TypeError("Option is empty");
-				return this.#value;
-			}
-			get() {
-				return this.#value;
-			}
-			ifPresent(consumer) {
-				if (this.#value !== undefined) consumer(this.#value);
-			}
-			ifPresentOrElse(consumer, orElse) {
-				if (this.#value !== undefined) consumer(this.#value);
-				else orElse();
-			}
-			orElseGet(supplier) {
-				if (this.#value !== undefined) return this.#value;
-				else return supplier();
-			}
-			orElse(other) {
-				if (this.#value !== undefined) return this.#value;
-				else return other;
-			}
-			orElseThrow(error) {
-				if (this.#value !== undefined) return this.#value;
-				else throw error;
-			}
-			map(mapper) {
-				if (this.#value !== undefined) return Option.ofNullable(mapper(this.#value));
+		}
+	}
+	exports.JSLib = JSLib;
+	class Option {
+		#valid;
+		#value;
+		/**
+		 * ## `of`
+		 * ### creates a new option with a value
+		 * @param {T} value value to create the option with
+		 * @returns {Option<T>} new option
+		 * @throws {TypeError} if the value is undefined
+		 * @see {@link IOption#ofNullable}
+		 * @see {@link IOption#empty}
+		*/
+		static of(value) {
+			if (value === undefined) throw new TypeError("Value cannot be undefined");
+			return new Option(value);
+		}
+		/**
+		 * ## `ofNullable`
+		 * ### creates a new option with a value or undefined
+		 * @param {T | undefined} value value to create the option with
+		 * @returns {Option<T>} new option
+		 * @see {@link IOption#of}
+		 * @see {@link IOption#empty}
+		*/
+		static ofNullable(value) {
+			return new Option(value);
+		}
+		/**
+		 * ## `empty`
+		 * ### creates a new empty option
+		 * @returns {Option<T>} new option
+		 * @see {@link IOption#of}
+		 * @see {@link IOption#ofNullable}
+		*/
+		static empty() {
+			return new Option(undefined);
+		}
+		constructor(value) {
+			if (value === undefined) this.#valid = false;
+			else this.#valid = true;
+			this.#value = value;
+		}
+		isPresent() {
+			return this.#valid && this.#value !== undefined;
+		}
+		getStrict() {
+			if (this.#value === undefined) throw new TypeError("Option is empty");
+			return this.#value;
+		}
+		get() {
+			return this.#value;
+		}
+		ifPresent(consumer) {
+			if (this.#value !== undefined) consumer(this.#value);
+		}
+		ifPresentOrElse(consumer, orElse) {
+			if (this.#value !== undefined) consumer(this.#value);
+			else orElse();
+		}
+		orElseGet(supplier) {
+			if (this.#value !== undefined) return this.#value;
+			else return supplier();
+		}
+		orElse(other) {
+			if (this.#value !== undefined) return this.#value;
+			else return other;
+		}
+		orElseThrow(error) {
+			if (this.#value !== undefined) return this.#value;
+			else throw error;
+		}
+		map(mapper) {
+			if (this.#value !== undefined) return Option.ofNullable(mapper(this.#value));
+			else return Option.empty();
+		}
+		flatMap(mapper) {
+			if (this.#value !== undefined) return mapper(this.#value);
+			else return Option.empty();
+		}
+		filter(predicate) {
+			if (this.#value !== undefined) {
+				if (predicate(this.#value)) return this;
 				else return Option.empty();
 			}
-			flatMap(mapper) {
-				if (this.#value !== undefined) return mapper(this.#value);
-				else return Option.empty();
-			}
-			filter(predicate) {
-				if (this.#value !== undefined) {
-					if (predicate(this.#value)) return this;
-					else return Option.empty();
-				} else return Option.empty();
-			}
-			equals(other) {
-				if (this.isPresent() && other.isPresent()) {
-					return this.#value === other.#value;
-				} else if (!this.isPresent() && !other.isPresent()) {
-					return true;
-				} else return false;
-			}
-			set(value) {
-				this.#value = value;
-				this.#valid = true;
-			}
-			clear() {
-				this.#value = undefined;
-				this.#valid = false;
-			}
-			setNullable(value) {
-				this.#value = value;
-				if (value === undefined) this.#valid = false;
-				else this.#valid = true;
-			}
-		}__private__.Option = Option;
-		class EventEmitter {
-			_events_ = new Map();
-			on(event, listener) {
-				if (!this._events_.has(event)) this._events_.set(event, new Set());
-				this._events_.get(event).add(listener);
-				return this;
-			}
-			once(event, listener) {
-				const l = listener;
-				l.__once__ = true;
-				return this.on(event, l);
-			}
-			off(event, listener) {
-				if ((event === undefined || event === null) && listener) throw new Error("Why is there a listener defined here?");
-				else if ((event === undefined || event === null) && !listener) this._events_.clear();
-				else if (event && !listener) this._events_.delete(event);
-				else if (event && listener && this._events_.has(event)) {
-					const _ = this._events_.get(event);
-					_.delete(listener);
-					if (_.size === 0) this._events_.delete(event);
-				} else;return this;
-			}
-			emitSync(event, ...args) {
-				if (!this._events_.has(event)) return this;
+			else return Option.empty();
+		}
+		equals(other) {
+			if (this.isPresent() && other.isPresent()) return this.#value === other.#value;
+			else if (!this.isPresent() && !other.isPresent()) return true;
+			else return false;
+		}
+		set(value) {
+			this.#value = value;
+			this.#valid = true;
+		}
+		clear() {
+			this.#value = undefined;
+			this.#valid = false;
+		}
+		setNullable(value) {
+			this.#value = value;
+			if (value === undefined) this.#valid = false;
+			else this.#valid = true;
+		}
+	}
+	exports.Option = Option;
+	class EventEmitter {
+		_events_ = new Map();
+		on(event, listener) {
+			if (!this._events_.has(event)) this._events_.set(event, new Set());
+			this._events_.get(event).add(listener);
+			return this;
+		}
+		once(event, listener) {
+			const l = listener;
+			l.__once__ = true;
+			return this.on(event, l);
+		}
+		off(event, listener) {
+			if ((event === undefined || event === null) && listener)
+				throw new Error("Why is there a listener defined here?");
+			else if ((event === undefined || event === null) && !listener)
+				this._events_.clear();
+			else if (event && !listener)
+				this._events_.delete(event);
+			else if (event && listener && this._events_.has(event)) {
 				const _ = this._events_.get(event);
-				for (const [, listener] of _.entries()) {
-					const r = listener(...args);
-					if (r instanceof Promise) r.catch(console.error);
+				_.delete(listener);
+				if (_.size === 0) this._events_.delete(event);
+			} else;
+			return this;
+		}
+		emitSync(event, ...args) {
+			if (!this._events_.has(event)) return this;
+			const _ = this._events_.get(event);
+			for (const [, listener] of _.entries()) {
+				const r = listener(...args);
+				if (r instanceof Promise) r.catch(console.error);
+				if (listener.__once__) {
+					delete listener.__once__;
+					_.delete(listener);
+				}
+			}
+			if (_.size === 0) this._events_.delete(event);
+			return this;
+		}
+		async emit(event, ...args) {
+			if (!this._events_.has(event)) return this;
+			const _ = this._events_.get(event);
+			for (const [, listener] of _.entries()) {
+				try {
+					await listener(...args);
 					if (listener.__once__) {
 						delete listener.__once__;
 						_.delete(listener);
 					}
+				} catch (error) {
+					console.error(error);
 				}
-				if (_.size === 0) this._events_.delete(event);
-				return this;
 			}
-			async emit(event, ...args) {
-				if (!this._events_.has(event)) return this;
-				const _ = this._events_.get(event);
-				for (const [, listener] of _.entries()) {
-					try {
-						await listener(...args);
-						if (listener.__once__) {
-							delete listener.__once__;
-							_.delete(listener);
-						}
-					} catch (error) {
-						console.error(error);
-					}
-				}
-				if (_.size === 0) this._events_.delete(event);
-				return this;
-			}
-			queue(event, ...args) {
-				(async () => await this.emit(event, ...args))().catch(console.error);
-				return this;
-			}
-			pull(event, timeout) {
-				return new Promise(async (resolve, reject) => {
-					let timeoutId;
-					const listener = (...args) => {
-						if (timeoutId !== null)
-							clearTimeout(timeoutId);
-						resolve(args);
-					};
-					timeoutId = typeof timeout !== "number"
-						? null
-						: setTimeout(() => (
-							this.off(event, listener),
-							reject(
-								new Error("Timed out!")
-							)
-						));
-					this.once(event, listener);
-				});
-			}
-		}__private__.EventEmitter = EventEmitter;
-	})(__private__ || (__private__ = {}));
+			if (_.size === 0) this._events_.delete(event);
+			return this;
+		}
+		queue(event, ...args) {
+			(async () => await this.emit(event, ...args))().catch(console.error);
+			return this;
+		}
+		pull(event, timeout) {
+			return new Promise(async (resolve, reject) => {
+				let timeoutId;
+				const listener = (...args) => {
+					if (timeoutId !== null)
+						clearTimeout(timeoutId);
+					resolve(args);
+				};
+				timeoutId = typeof timeout !== "number"
+					? null
+					: setTimeout(() => (this.off(event, listener),
+					reject(new Error("Timed out!"))))
+				;
+				this.once(event, listener);
+			});
+		}
+	}
+	exports.EventEmitter = EventEmitter;
+	/**
+	 * ## `e2e`
+	 * ### casts a connectable to a connection
+	 * @param {C1 | C2} i
+	 * @returns {C3 | C4}
+	 * @throws {TypeError}
+	 * @template C1 extends IConnection
+	 * @template C2 extends IStrictConnection
+	 * @template C3 extends IConnectable
+	 * @template C4 extends IStrictConnectable
+	*/
 	function e2c(i) {
 		if ("strictConnection" in i) return {
 			host: i["strictConnection"].host,
@@ -215,25 +251,37 @@
 			port: i.connection.port,
 			secure: i.connection.secure,
 		};
+
 	}
+	/**
+	 * ## `c2e`
+	 * ### casts a connection to a connectable
+	 * @param {C1 | C2} i
+	 * @returns {C3 | C4}
+	 * @throws {TypeError}
+	 * @template C1 extends IConnection
+	 * @template C2 extends IStrictConnection
+	 * @template C3 extends IConnectable
+	 * @template C4 extends IStrictConnectable
+	*/
 	function c2e(i) {
 		if ("host" in i && "port" in i && "secure" in i) {
 			if (typeof i.host === "string" &&
 				typeof i.port === "number" &&
-				typeof i.secure === "boolean"
-			) return {
-				connection: {
-					host: i.host,
-					port: i.port,
-					secure: i.secure,
-				},
-				strictConnection: {
-					host: i.host,
-					port: i.port,
-					secure: i.secure,
-				}
-			};
-			return {
+				typeof i.secure === "boolean") {
+				return {
+					connection: {
+						host: i.host,
+						port: i.port,
+						secure: i.secure,
+					},
+					strictConnection: {
+						host: i.host,
+						port: i.port,
+						secure: i.secure,
+					}
+				};
+			} else return {
 				connection: {
 					host: i.host,
 					port: i.port,
@@ -242,6 +290,12 @@
 			};
 		} else throw new TypeError("Invalid connection");
 	}
+	/**
+	 * ## `iConnectionParser`
+	 * ### parses a connection string or object into a connection object
+	 * @param {string | IConnection} connection
+	 * @returns {IStrictConnection}
+	*/
 	function iConnectionParser(connection) {
 		if (connection === undefined) return {
 			host: "localhost",
@@ -266,17 +320,14 @@
 				const split = sp.split(":");
 				newHost.host = split[0];
 				newHost.port = parseInt(split[1]);
-			} else {
-				newHost.host = sp;
-			}
+			} else newHost.host = sp;
 		} else {
 			if (connection.includes(":")) {
 				const split = connection.split(":");
 				newHost.host = split[0];
 				newHost.port = parseInt(split[1]);
-			} else {
-				newHost.host = connection;
 			}
+			else newHost.host = connection;
 		}
 		return newHost;
 	}
@@ -286,12 +337,19 @@
 		#secure;
 		#ws;
 		#eventHandler;
+		/**
+		 * ## `constructor`
+		 * ### creates a new connected titanium server
+		 * @param {IStrictConnectable} c strict connectable object
+		 * @param {WebSocket} ws websocket connection
+		 * @constructor
+		*/
 		constructor(c, ws) {
 			this.#host = c.strictConnection.host;
 			this.#port = c.strictConnection.port;
 			this.#secure = c.strictConnection.secure;
 			this.#ws = ws;
-			this.#eventHandler = new __private__.EventEmitter();
+			this.#eventHandler = new EventEmitter();
 			this.#ws.onopen = () => {
 				this.#eventHandler.emitSync("open");
 			};
@@ -374,13 +432,7 @@
 			}
 		}
 	}
-	let __main__ = __private__.Option.empty();
-	function main(callback) {
-		__main__ = __private__.Option.of(callback);
-	}
-	function __run_main__() {
-		__main__.ifPresent((c) => c());
-	}
+	let __main__ = Option.empty();
 	function loadJSLIB(uri, blocking) {
 		blocking = blocking === undefined ? true : blocking;
 		let __e__ = "";
@@ -390,33 +442,37 @@
 				if (__r__.readyState == 4) {
 					if (__r__.status == 200) {
 						__e__ = __r__.responseText;
-					}
-					else {
-						console.error("Error Loading Library '" +
+					} else {
+						console.error(
+							"Error Loading Library '" +
 							uri + "', Server returned status code " +
-							__r__.status);
+							__r__.status
+						);
 						__e__ = "";
 					}
 				}
 			};
 			__r__.open("GET", uri, !blocking);
 			__r__.send();
-		}
-		catch (__f__) {
+		} catch (__f__) {
 			console.error("Error loading " + uri);
 			console.error(__f__);
-		}
-		finally {
-			return new __private__.JSLib(__e__);
+		} finally {
+			return new JSLib(__e__);
 		}
 	}
+	exports.loadJSLIB = loadJSLIB;
+	function main(callback) {
+		__main__ = Option.of(callback);
+	}
+	exports.main = main;
+	function __run_main__() {
+		__main__.ifPresent((c) => c());
+	}
+	exports.__run_main__ = __run_main__;
 	function connect(host) {
 		const server = new TitaniumServer(c2e(iConnectionParser(host)));
 		return server.connect();
 	}
-	exports.__private__ = __private__;
-	exports.loadJSLIB = loadJSLIB;
 	exports.connect = connect;
-	exports.main = main;
-	exports.__run_main__ = __run_main__;
 }));

@@ -1,6 +1,6 @@
 [package]
 name = "titanium_web"
-version = "1.0.0-alpha.1"
+version = "1.0.0-alpha.2"
 edition = "2021"
 
 [lib]
@@ -12,4 +12,5 @@ tide-websockets = "0.4.0"
 tide = "0.16.0"
 
 [features]
-full = []
+socket = []
+full = ["socket"]

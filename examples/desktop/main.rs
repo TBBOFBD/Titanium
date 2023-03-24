@@ -1,5 +1,5 @@
 // Used to launch without a command line interface
-#![windows_subsystem = "windows"]
+#![cfg_attr(all(not(debug_assertions),target_os="windows"),windows_subsystem="windows")]
 
 use titanium::desktop::{
     // memory::MemoryManager,

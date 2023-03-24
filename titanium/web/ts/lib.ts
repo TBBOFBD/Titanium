@@ -1,7 +1,7 @@
 /**
  * @author AtomicGamer9523
  * @license MIT
- * @version 1.0.0-alpha.1
+ * @version 1.0.0-alpha.2
  * @description Titanium Web API Library
 */
 
@@ -231,7 +231,7 @@ type EventsType = {
  * @param {E} [events={}] events to listen for
  * @template E events type
 */
-interface IEventEmitter<E extends EventsType = {}> {
+export interface IEventEmitter<E extends EventsType = {}> {
     /**
      * ## `on`
      * ### adds an event listener
@@ -386,7 +386,7 @@ interface IEventEmitter<E extends EventsType = {}> {
  * });
  * ```
 */
-interface IOption<T> {
+export interface IOption<T> {
     /**
      * ## `isPresent`
      * ### Checks if the option is present
@@ -513,7 +513,7 @@ interface IOption<T> {
  * TITANIUM.loadJSLIB("myLib.js").inject();
  * ```
 */
-interface IJSLib {
+export interface IJSLib {
     /**
      * # `getCode`
      * ## Gets the code of the JSLIB
@@ -540,260 +540,254 @@ interface IJSLib {
     */
     inject(): void;
 }
-/**@NODECLARATIONEMIT */
-export namespace __private__ {
+/**
+ * ## `JSLib`
+ * ### Represents a JSLIB
+ * @class JSLib
+ * @public
+ * @memberof TITANIUM
+ * @description Represents a JSLIB
+*/
+export class JSLib implements IJSLib {
+    #code: string;
+    constructor(code: string) {
+        this.#code = code;
+    }
+    public getCode(): string {
+        return this.#code;
+    }
+    public inject(): void {
+        try {
+            eval(this.#code);
+        } catch (e) {
+            console.error("Error injecting JSLIB");
+            console.error(e);
+        }
+    }
+}
+/**
+ * # `Option`
+ * ## class for optional values
+ * ### Example:
+ * ```js
+ * const option: Option<string> = Option.of("Hello World");
+ * ```
+ * @class Option
+ * @public
+ * @memberof TITANIUM
+ * @description class for optional values
+*/
+export class Option<T> implements IOption<T> {
+    #valid: boolean;
+    #value: T | undefined;
     /**
-     * ## `JSLib`
-     * ### Represents a JSLIB
-     * @class JSLib
-     * @public
-     * @memberof TITANIUM
-     * @description Represents a JSLIB
-     * @NODECLARATIONEMIT
+     * ## `of`
+     * ### creates a new option with a value
+     * @param {T} value value to create the option with
+     * @returns {Option<T>} new option
+     * @throws {TypeError} if the value is undefined
+     * @see {@link IOption#ofNullable}
+     * @see {@link IOption#empty}
     */
-    export class JSLib implements IJSLib {
-        #code: string;
-        constructor(code: string) {
-            this.#code = code;
-        }
-        public getCode(): string {
-            return this.#code;
-        }
-        public inject(): void {
-            try {
-                eval(this.#code);
-            } catch (e) {
-                console.error("Error injecting JSLIB");
-                console.error(e);
+    public static of<T>(value: T): Option<T> {
+        if (value === undefined) throw new TypeError("Value cannot be undefined");
+        return new Option(value);
+    }
+    /**
+     * ## `ofNullable`
+     * ### creates a new option with a value or undefined
+     * @param {T | undefined} value value to create the option with
+     * @returns {Option<T>} new option
+     * @see {@link IOption#of}
+     * @see {@link IOption#empty}
+    */
+    public static ofNullable<T>(value: T | undefined): Option<T> {
+        return new Option(value);
+    }
+    /**
+     * ## `empty`
+     * ### creates a new empty option
+     * @returns {Option<T>} new option
+     * @see {@link IOption#of}
+     * @see {@link IOption#ofNullable}
+    */
+    public static empty<T>(): Option<T> {
+        return new Option<T>(undefined);
+    }
+    constructor(value: T | undefined) {
+        if (value === undefined) this.#valid = false;
+        else this.#valid = true;
+        this.#value = value;
+    }
+    public isPresent(): boolean {
+        return this.#valid && this.#value !== undefined;
+    }
+    public getStrict(): T {
+        if (this.#value === undefined) throw new TypeError("Option is empty");
+        return this.#value;
+    }
+    public get(): T | undefined {
+        return this.#value;
+    }
+    public ifPresent(consumer: (value: T) => void): void {
+        if (this.#value !== undefined) consumer(this.#value);
+    }
+    public ifPresentOrElse(consumer: (value: T) => void, orElse: () => void): void {
+        if (this.#value !== undefined) consumer(this.#value);
+        else orElse();
+    }
+    public orElseGet(supplier: () => T): T {
+        if (this.#value !== undefined) return this.#value;
+        else return supplier();
+    }
+    public orElse(other: T): T {
+        if (this.#value !== undefined) return this.#value;
+        else return other;
+    }
+    public orElseThrow(error: Error): T {
+        if (this.#value !== undefined) return this.#value;
+        else throw error;
+    }
+    public map<R>(mapper: (value: T) => R): Option<R> {
+        if (this.#value !== undefined) return Option.ofNullable(mapper(this.#value));
+        else return Option.empty();
+    }
+    public flatMap<R>(mapper: (value: T) => Option<R>): Option<R> {
+        if (this.#value !== undefined) return mapper(this.#value);
+        else return Option.empty();
+    }
+    public filter(predicate: (value: T) => boolean): Option<T> {
+        if (this.#value !== undefined) {
+            if (predicate(this.#value)) return this;
+            else return Option.empty();
+        } else return Option.empty();
+    }
+    public equals(other: Option<T>): boolean {
+        if (this.isPresent() && other.isPresent()) {
+            return this.#value === other.#value;
+        } else if (!this.isPresent() && !other.isPresent()) {
+            return true;
+        } else return false;
+    }
+    public set(value: T): void {
+        this.#value = value;
+        this.#valid = true;
+    }
+    public clear(): void {
+        this.#value = undefined;
+        this.#valid = false;
+    }
+    public setNullable(value: T | undefined): void {
+        this.#value = value;
+        if (value === undefined) this.#valid = false;
+        else this.#valid = true;
+    }
+}
+/**
+ * # `EventEmitter`
+ * ## class for event emitters
+ * ### Example:
+ * ```js
+ * const emitter = new EventEmitter();
+ * emitter.on("event", (data) => {
+ *    console.log(data);
+ * });
+ * emitter.emit("event", "Hello World");
+ * ```
+ * @class EventEmitter
+ * @public
+ * @memberof TITANIUM
+ * @description class for event emitters
+*/
+export class EventEmitter<E extends EventsType = {}> implements IEventEmitter<E> {
+    private _events_: Map<keyof E, Set<Listener>> = new Map();
+    public on<K extends keyof E>(event: K, listener: E[K]): this;
+    public on(event: EventName, listener: Callback): this {
+        if (!this._events_.has(event)) this._events_.set(event, new Set());
+        this._events_.get(event)!.add(listener);
+        return this;
+    }
+    public once<K extends keyof E>(event: K, listener: E[K]): this;
+    public once(event: EventName, listener: Callback): this {
+        const l: Listener = listener;
+        l.__once__ = true;
+        return this.on(event, l as any);
+    }
+    public off<K extends keyof E>(event: K, listener: E[K]): this;
+    public off<K extends keyof E>(event: K): this;
+    public off(): this;
+    public off(event?: EventName, listener?: Callback): this {
+        if ((event === undefined || event === null) && listener)
+            throw new Error("Why is there a listener defined here?");
+        else if ((event === undefined || event === null) && !listener)
+            this._events_.clear();
+        else if (event && !listener)
+            this._events_.delete(event);
+        else if (event && listener && this._events_.has(event)) {
+            const _ = this._events_.get(event)!;
+            _.delete(listener);
+            if (_.size === 0) this._events_.delete(event);
+        } else;
+        return this;
+    }
+    public emitSync<K extends keyof E>(event: K, ...args: Parameters<E[K]>): this;
+    public emitSync(event: EventName, ...args: Parameters<Callback>): this {
+        if (!this._events_.has(event)) return this;
+        const _ = this._events_.get(event)!;
+        for (const [, listener] of _.entries()) {
+            const r = listener(...args);
+            if (r instanceof Promise) r.catch(console.error);
+            if (listener.__once__) {
+                delete listener.__once__;
+                _.delete(listener);
             }
         }
+        if (_.size === 0) this._events_.delete(event);
+        return this;
     }
-    /**
-     * # `Option`
-     * ## class for optional values
-     * ### Example:
-     * ```js
-     * const option: Option<string> = Option.of("Hello World");
-     * ```
-     * @class Option
-     * @public
-     * @memberof TITANIUM
-     * @description class for optional values
-     * @NODECLARATIONEMIT
-    */
-    export class Option<T> implements IOption<T> {
-        #valid: boolean;
-        #value: T | undefined;
-        /**
-         * ## `of`
-         * ### creates a new option with a value
-         * @param {T} value value to create the option with
-         * @returns {Option<T>} new option
-         * @throws {TypeError} if the value is undefined
-         * @see {@link IOption#ofNullable}
-         * @see {@link IOption#empty}
-        */
-        public static of<T>(value: T): Option<T> {
-            if (value === undefined) throw new TypeError("Value cannot be undefined");
-            return new Option(value);
-        }
-        /**
-         * ## `ofNullable`
-         * ### creates a new option with a value or undefined
-         * @param {T | undefined} value value to create the option with
-         * @returns {Option<T>} new option
-         * @see {@link IOption#of}
-         * @see {@link IOption#empty}
-        */
-        public static ofNullable<T>(value: T | undefined): Option<T> {
-            return new Option(value);
-        }
-        /**
-         * ## `empty`
-         * ### creates a new empty option
-         * @returns {Option<T>} new option
-         * @see {@link IOption#of}
-         * @see {@link IOption#ofNullable}
-        */
-        public static empty<T>(): Option<T> {
-            return new Option<T>(undefined);
-        }
-        constructor(value: T | undefined) {
-            if (value === undefined) this.#valid = false;
-            else this.#valid = true;
-            this.#value = value;
-        }
-        public isPresent(): boolean {
-            return this.#valid && this.#value !== undefined;
-        }
-        public getStrict(): T {
-            if (this.#value === undefined) throw new TypeError("Option is empty");
-            return this.#value;
-        }
-        public get(): T | undefined {
-            return this.#value;
-        }
-        public ifPresent(consumer: (value: T) => void): void {
-            if (this.#value !== undefined) consumer(this.#value);
-        }
-        public ifPresentOrElse(consumer: (value: T) => void, orElse: () => void): void {
-            if (this.#value !== undefined) consumer(this.#value);
-            else orElse();
-        }
-        public orElseGet(supplier: () => T): T {
-            if (this.#value !== undefined) return this.#value;
-            else return supplier();
-        }
-        public orElse(other: T): T {
-            if (this.#value !== undefined) return this.#value;
-            else return other;
-        }
-        public orElseThrow(error: Error): T {
-            if (this.#value !== undefined) return this.#value;
-            else throw error;
-        }
-        public map<R>(mapper: (value: T) => R): Option<R> {
-            if (this.#value !== undefined) return Option.ofNullable(mapper(this.#value));
-            else return Option.empty();
-        }
-        public flatMap<R>(mapper: (value: T) => Option<R>): Option<R> {
-            if (this.#value !== undefined) return mapper(this.#value);
-            else return Option.empty();
-        }
-        public filter(predicate: (value: T) => boolean): Option<T> {
-            if (this.#value !== undefined) {
-                if (predicate(this.#value)) return this;
-                else return Option.empty();
-            } else return Option.empty();
-        }
-        public equals(other: Option<T>): boolean {
-            if (this.isPresent() && other.isPresent()) {
-                return this.#value === other.#value;
-            } else if (!this.isPresent() && !other.isPresent()) {
-                return true;
-            } else return false;
-        }
-        public set(value: T): void {
-            this.#value = value;
-            this.#valid = true;
-        }
-        public clear(): void {
-            this.#value = undefined;
-            this.#valid = false;
-        }
-        public setNullable(value: T | undefined): void {
-            this.#value = value;
-            if (value === undefined) this.#valid = false;
-            else this.#valid = true;
-        }
-    }
-    /**
-     * # `EventEmitter`
-     * ## class for event emitters
-     * ### Example:
-     * ```js
-     * const emitter = new EventEmitter();
-     * emitter.on("event", (data) => {
-     *    console.log(data);
-     * });
-     * emitter.emit("event", "Hello World");
-     * ```
-     * @class EventEmitter
-     * @public
-     * @memberof TITANIUM
-     * @description class for event emitters
-     * @NODECLARATIONEMIT
-    */
-    export class EventEmitter<E extends EventsType = {}> implements IEventEmitter<E> {
-        private _events_: Map<keyof E, Set<Listener>> = new Map();
-        public on<K extends keyof E>(event: K, listener: E[K]): this;
-        public on(event: EventName, listener: Callback): this {
-            if (!this._events_.has(event)) this._events_.set(event, new Set());
-            this._events_.get(event)!.add(listener);
-            return this;
-        }
-        public once<K extends keyof E>(event: K, listener: E[K]): this;
-        public once(event: EventName, listener: Callback): this {
-            const l: Listener = listener;
-            l.__once__ = true;
-            return this.on(event, l as any);
-        }
-        public off<K extends keyof E>(event: K, listener: E[K]): this;
-        public off<K extends keyof E>(event: K): this;
-        public off(): this;
-        public off(event?: EventName, listener?: Callback): this {
-            if ((event === undefined || event === null) && listener)
-                throw new Error("Why is there a listener defined here?");
-            else if ((event === undefined || event === null) && !listener)
-                this._events_.clear();
-            else if (event && !listener)
-                this._events_.delete(event);
-            else if (event && listener && this._events_.has(event)) {
-                const _ = this._events_.get(event)!;
-                _.delete(listener);
-                if (_.size === 0) this._events_.delete(event);
-            } else;
-            return this;
-        }
-        public emitSync<K extends keyof E>(event: K, ...args: Parameters<E[K]>): this;
-        public emitSync(event: EventName, ...args: Parameters<Callback>): this {
-            if (!this._events_.has(event)) return this;
-            const _ = this._events_.get(event)!;
-            for (const [, listener] of _.entries()) {
-                const r = listener(...args);
-                if (r instanceof Promise) r.catch(console.error);
+    public async emit<K extends keyof E>(event: K, ...args: Parameters<E[K]>): Promise<this>;
+    public async emit(event: EventName, ...args: Parameters<Callback>): Promise<this> {
+        if (!this._events_.has(event)) return this;
+        const _ = this._events_.get(event)!;
+        for (const [, listener] of _.entries()) {
+            try {
+                await listener(...args);
                 if (listener.__once__) {
                     delete listener.__once__;
                     _.delete(listener);
                 }
+            } catch (error) {
+                console.error(error);
             }
-            if (_.size === 0) this._events_.delete(event);
-            return this;
         }
-        public async emit<K extends keyof E>(event: K, ...args: Parameters<E[K]>): Promise<this>;
-        public async emit(event: EventName, ...args: Parameters<Callback>): Promise<this> {
-            if (!this._events_.has(event)) return this;
-            const _ = this._events_.get(event)!;
-            for (const [, listener] of _.entries()) {
-                try {
-                    await listener(...args);
-                    if (listener.__once__) {
-                        delete listener.__once__;
-                        _.delete(listener);
-                    }
-                } catch (error) {
-                    console.error(error);
-                }
-            }
-            if (_.size === 0) this._events_.delete(event);
-            return this;
-        }
-        public queue<K extends keyof E>(event: K, ...args: Parameters<E[K]>): this;
-        public queue(event: EventName, ...args: Parameters<Callback>): this {
-            (async () => await this.emit(event, ...args as any))().catch(console.error);
-            return this;
-        }
-        public pull<K extends keyof E>(event: K, timeout?: number): Promise<Parameters<E[K]>>;
-        public pull(event: EventName, timeout?: number): Promise<Parameters<Callback>> {
-            return new Promise(async (resolve, reject) => {
-                let timeoutId: number | null
-                const listener = (...args: any[]) => {
-                    if (timeoutId !== null) clearTimeout(timeoutId);
-                    resolve(args);
-                };
+        if (_.size === 0) this._events_.delete(event);
+        return this;
+    }
+    public queue<K extends keyof E>(event: K, ...args: Parameters<E[K]>): this;
+    public queue(event: EventName, ...args: Parameters<Callback>): this {
+        (async () => await this.emit(event, ...args as any))().catch(console.error);
+        return this;
+    }
+    public pull<K extends keyof E>(event: K, timeout?: number): Promise<Parameters<E[K]>>;
+    public pull(event: EventName, timeout?: number): Promise<Parameters<Callback>> {
+        return new Promise(async (resolve, reject) => {
+            let timeoutId: number | null
+            const listener = (...args: any[]) => {
+                if (timeoutId !== null) clearTimeout(timeoutId);
+                resolve(args);
+            };
 
-                timeoutId = typeof timeout !== "number"
-                    ? null
-                    : setTimeout(() => (
-                        this.off(event, listener as any),
-                        reject(
-                            new Error("Timed out!")
-                        )
-                    ))
-                ;
-                this.once(event, listener as any);
-            });
-        }
+            timeoutId = typeof timeout !== "number"
+                ? null
+                : setTimeout(() => (
+                    this.off(event, listener as any),
+                    reject(
+                        new Error("Timed out!")
+                    )
+                ))
+            ;
+            this.once(event, listener as any);
+        });
     }
 }
 /**
@@ -919,25 +913,40 @@ function iConnectionParser(connection?: string | IConnection): IStrictConnection
     }
     return newHost;
 }
+/**
+ * ## `ConnectedTitaniumServer`
+ * ### a connected titanium server
+ * @implements {IConnectedTitaniumServer}
+ * @implements {IStrictConnectable}
+ * @class
+*/
 class ConnctedTitaniumServer
     implements IConnectedTitaniumServer,
-    IStrictConnectable {
+    IStrictConnectable
+{
     #host: string;
     #port: number;
     #secure: boolean;
     #ws: WebSocket;
-    #eventHandler: __private__.EventEmitter<{
+    #eventHandler: EventEmitter<{
         open(): void;
         close(): void;
         message(data: string): void;
         error(err: Error): void;
     }>;
+    /**
+     * ## `constructor`
+     * ### creates a new connected titanium server
+     * @param {IStrictConnectable} c strict connectable object
+     * @param {WebSocket} ws websocket connection
+     * @constructor
+    */
     constructor(c: IStrictConnectable, ws: WebSocket) {
         this.#host = c.strictConnection.host;
         this.#port = c.strictConnection.port;
         this.#secure = c.strictConnection.secure;
         this.#ws = ws;
-        this.#eventHandler = new __private__.EventEmitter<{
+        this.#eventHandler = new EventEmitter<{
             open(): void;
             close(): void;
             message(data: string): void;
@@ -1038,7 +1047,12 @@ class TitaniumServer
     }
 }
 
-let __main__: __private__.Option<() => void> = __private__.Option.empty();
+/**
+ * Main function of the library
+ * @type {Option<() => void>} an optional function that will be called when the library is loaded
+ * @memberof TITANIUM
+*/
+let __main__: Option<() => void> = Option.empty();
 
 /**
  * # `loadJSLIB`
@@ -1098,7 +1112,7 @@ export function loadJSLIB(uri: string, blocking?: boolean): IJSLib {
         console.error("Error loading " + uri);
         console.error(__f__);
     } finally {
-        return new __private__.JSLib(__e__);
+        return new JSLib(__e__);
     }
 }
 
@@ -1120,7 +1134,7 @@ export function loadJSLIB(uri: string, blocking?: boolean): IJSLib {
  * @description sets the main function (entry point)
 */
 export function main(callback: () => void): void {
-    __main__ = __private__.Option.of(callback);
+    __main__ = Option.of(callback);
 }
 
 /**

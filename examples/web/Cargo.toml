@@ -3,8 +3,13 @@ name = "web"
 version = "0.1.0"
 edition = "2021"
 
+[[bin]]
+path = "main.rs"
+name = "web"
+
 [dependencies.titanium]
+features = ["web-full"]
 path = "../../"
 
 [dependencies]
-tokio = { version = "1", features = ["full"] }
+# add your dependencies here
