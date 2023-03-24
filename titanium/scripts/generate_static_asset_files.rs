@@ -1,5 +1,5 @@
-/// USE THIS SCRIPT TO GENERATE THE STATIC ASSET FILES
-/// This script will generate a file called lib.rs in "titanium/desktop/assets/"
+//! USE THIS SCRIPT TO GENERATE THE STATIC ASSET FILES
+//! This script will generate a file called lib.rs in "titanium/desktop/assets/"
 
 use std::io::Write;
 use std::fs;

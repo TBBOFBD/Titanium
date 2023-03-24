@@ -1,7 +1,7 @@
 /**
  * @author AtomicGamer9523
  * @license MIT
- * @version 1.0.0-alpha.1
+ * @version 1.0.0-alpha.2
  * @description Titanium Web API Library
 */
 
@@ -156,7 +156,7 @@ type EventsType = {
  * @param {E} [events={}] events to listen for
  * @template E events type
 */
-interface IEventEmitter<E extends EventsType = {}> {
+export interface IEventEmitter<E extends EventsType = {}> {
     /**
      * ## `on`
      * ### adds an event listener
@@ -311,7 +311,7 @@ interface IEventEmitter<E extends EventsType = {}> {
  * });
  * ```
 */
-interface IOption<T> {
+export interface IOption<T> {
     /**
      * ## `isPresent`
      * ### Checks if the option is present
@@ -438,7 +438,7 @@ interface IOption<T> {
  * TITANIUM.loadJSLIB("myLib.js").inject();
  * ```
 */
-interface IJSLib {
+export interface IJSLib {
     /**
      * # `getCode`
      * ## Gets the code of the JSLIB
@@ -466,23 +466,105 @@ interface IJSLib {
     inject(): void;
 }
 /**
- * # `main`
- * ## sets the main function (entry point)
+ * ## `JSLib`
+ * ### Represents a JSLIB
+ * @class JSLib
+ * @public
+ * @memberof TITANIUM
+ * @description Represents a JSLIB
+*/
+export declare class JSLib implements IJSLib {
+    #private;
+    constructor(code: string);
+    getCode(): string;
+    inject(): void;
+}
+/**
+ * # `Option`
+ * ## class for optional values
  * ### Example:
  * ```js
- * TITANIUM.main(() => {
- *    console.log("Hello World!");
- * });
+ * const option: Option<string> = Option.of("Hello World");
  * ```
- * @param {() => void} callback the main function
- * @function main
- * @memberof TITANIUM
- * @instance
+ * @class Option
  * @public
- * @type {Function}
- * @description sets the main function (entry point)
+ * @memberof TITANIUM
+ * @description class for optional values
 */
-export declare function main(callback: () => void): void;
+export declare class Option<T> implements IOption<T> {
+    #private;
+    /**
+     * ## `of`
+     * ### creates a new option with a value
+     * @param {T} value value to create the option with
+     * @returns {Option<T>} new option
+     * @throws {TypeError} if the value is undefined
+     * @see {@link IOption#ofNullable}
+     * @see {@link IOption#empty}
+    */
+    static of<T>(value: T): Option<T>;
+    /**
+     * ## `ofNullable`
+     * ### creates a new option with a value or undefined
+     * @param {T | undefined} value value to create the option with
+     * @returns {Option<T>} new option
+     * @see {@link IOption#of}
+     * @see {@link IOption#empty}
+    */
+    static ofNullable<T>(value: T | undefined): Option<T>;
+    /**
+     * ## `empty`
+     * ### creates a new empty option
+     * @returns {Option<T>} new option
+     * @see {@link IOption#of}
+     * @see {@link IOption#ofNullable}
+    */
+    static empty<T>(): Option<T>;
+    constructor(value: T | undefined);
+    isPresent(): boolean;
+    getStrict(): T;
+    get(): T | undefined;
+    ifPresent(consumer: (value: T) => void): void;
+    ifPresentOrElse(consumer: (value: T) => void, orElse: () => void): void;
+    orElseGet(supplier: () => T): T;
+    orElse(other: T): T;
+    orElseThrow(error: Error): T;
+    map<R>(mapper: (value: T) => R): Option<R>;
+    flatMap<R>(mapper: (value: T) => Option<R>): Option<R>;
+    filter(predicate: (value: T) => boolean): Option<T>;
+    equals(other: Option<T>): boolean;
+    set(value: T): void;
+    clear(): void;
+    setNullable(value: T | undefined): void;
+}
+/**
+ * # `EventEmitter`
+ * ## class for event emitters
+ * ### Example:
+ * ```js
+ * const emitter = new EventEmitter();
+ * emitter.on("event", (data) => {
+ *    console.log(data);
+ * });
+ * emitter.emit("event", "Hello World");
+ * ```
+ * @class EventEmitter
+ * @public
+ * @memberof TITANIUM
+ * @description class for event emitters
+*/
+export declare class EventEmitter<E extends EventsType = {}> implements IEventEmitter<E> {
+    private _events_;
+    on<K extends keyof E>(event: K, listener: E[K]): this;
+    once<K extends keyof E>(event: K, listener: E[K]): this;
+    off<K extends keyof E>(event: K, listener: E[K]): this;
+    off<K extends keyof E>(event: K): this;
+    off(): this;
+    emitSync<K extends keyof E>(event: K, ...args: Parameters<E[K]>): this;
+    emit<K extends keyof E>(event: K, ...args: Parameters<E[K]>): Promise<this>;
+    queue<K extends keyof E>(event: K, ...args: Parameters<E[K]>): this;
+    pull<K extends keyof E>(event: K, timeout?: number): Promise<Parameters<E[K]>>;
+}
 /**
  * # `loadJSLIB`
  * ## Loads a JSLIB from an uri
@@ -518,6 +600,24 @@ export declare function main(callback: () => void): void;
 */
 export declare function loadJSLIB(uri: string, blocking?: boolean): IJSLib;
 /**
+ * # `main`
+ * ## sets the main function (entry point)
+ * ### Example:
+ * ```js
+ * TITANIUM.main(() => {
+ *    console.log("Hello World!");
+ * });
+ * ```
+ * @param {() => void} callback the main function
+ * @function main
+ * @memberof TITANIUM
+ * @instance
+ * @public
+ * @type {Function}
+ * @description sets the main function (entry point)
+*/
+export declare function main(callback: () => void): void;
+/**
  * # `connect`
  * ## Connects to a Titanium server
  * ### Example:
@@ -542,3 +642,4 @@ export declare function loadJSLIB(uri: string, blocking?: boolean): IJSLib;
  * ```
 */
 export declare function connect(host?: string | IConnection): IConnectedTitaniumServer;
+//# sourceMappingURL=lib.d.ts.map
