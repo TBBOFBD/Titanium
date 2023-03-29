@@ -10,6 +10,8 @@ path = "titanium/lib.rs"
 members = [
     "titanium/desktop",
     "titanium/web",
+    "examples/desktop",
+    "examples/web",
 ]
 
 [dependencies.titaniummacros]

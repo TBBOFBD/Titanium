@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
   workflow_dispatch:
 
 
@@ -28,18 +25,22 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-      - uses: actions-rs/toolchain@v1
+      - name: Install Toolchain
+        uses: actions-rs/toolchain@v1
         with:
           profile: minimal
           toolchain: nightly
       - name: Install Dependencies
         run: sudo apt-get install libgtk-3-dev libudev-dev -y
+      - name: Build
+        run: cargo build --workspace --all-features
+
       - run: cargo doc --workspace --no-deps
       - uses: "finnp/create-file-action@master"
         env:
           FILE_NAME: "./target/doc/index.html"
           FILE_DATA: '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=''./titanium''"/></head></html>' # Redirect to default page
-    
+
       - name: Setup Pages
         uses: actions/configure-pages@v2
       - name: Upload artifact

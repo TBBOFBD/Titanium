@@ -3,15 +3,15 @@ name = "web"
 version = "0.1.0"
 edition = "2021"
 
-[workspace]
-members = ["."]
-
 [[bin]]
 path = "main.rs"
 name = "web"
 
 [dependencies.titanium]
-features = ["web-full"]
+features = [
+    "web",
+    "web-full"
+]
 path = "../../"
 
 [dependencies]
