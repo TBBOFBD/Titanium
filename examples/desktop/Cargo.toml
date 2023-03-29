@@ -3,9 +3,6 @@ name = "desktop"
 version = "0.1.0"
 edition = "2021"
 
-[workspace]
-members = ["."]
-
 [[bin]]
 path = "main.rs"
 name = "desktop"
@@ -13,6 +10,7 @@ name = "desktop"
 [dependencies.titanium]
 path = "../../"
 features = [
+    "desktop",
     "desktop-gui",
 ]
 
