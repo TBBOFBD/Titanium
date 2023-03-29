@@ -16,7 +16,7 @@ package = "titanium_core"
 path = "../core"
 
 [dependencies.druid]
-version = "0.8.3"
+version = "0.8"
 features = [
     "image-all"
 ]
