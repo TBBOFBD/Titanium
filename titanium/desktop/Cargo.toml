@@ -1,22 +1,30 @@
 [package]
 name = "titanium_desktop"
-version = "1.0.0-alpha.2"
+version = "1.0.0-alpha.3"
 edition = "2021"
 
 [lib]
 path = "lib.rs"
 
-[dependencies.titaniumcore]
-package = "titanium_core"
-path = "./core"
+[dependencies.titaniummemory]
+package = "titanium_desktop_memory"
+path = "./memory"
+optional = true
+
+[dependencies.titaniumcommon]
+package = "titanium_common"
+path = "../common"
+optional = true
 
 [dependencies.titaniumgui]
-package = "titanium_gui"
+package = "titanium_desktop_gui"
 path = "./gui"
 optional = true
 
 [features]
-default = []
-full = ["gui"]
+default = ["common", "memory"]
+full = ["gui", "memory", "common"]
 
-gui = ["dep:titaniumgui"]
+common = ["titaniumcommon"]
+memory = ["titaniummemory"]
+gui = ["titaniumgui"]

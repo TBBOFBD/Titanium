@@ -1,19 +1,23 @@
 use std::f64::consts::PI;
 
+/// A 3D vector.
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
 pub struct Vector3 {
+    /// The x component of the vector.
     pub x: f32,
+    /// The y component of the vector.
     pub y: f32,
+    /// The z component of the vector.
     pub z: f32,
 }
 
 impl Vector3 {
-    // constructor
+    /// constructor
     pub const fn new(x: f32, y: f32, z: f32) -> Self {
         Vector3 { x, y, z }
     }
 
-    // utils
+    /// converts the vector to a angle
     pub fn to_angle(&self) -> Vector3 {
         Vector3 {
             x: (-self.z).atan2(self.x.hypot(self.y)) * (180.0 / PI) as f32,
@@ -22,6 +26,7 @@ impl Vector3 {
         }
     }
 
+    /// checks if the vector is zero
     pub fn is_zero(&self) -> bool {
         self.x == 0.0 && self.y == 0.0 && self.z == 0.0
     }

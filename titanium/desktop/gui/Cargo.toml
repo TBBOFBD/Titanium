@@ -1,19 +1,23 @@
 [package]
-name = "titanium_gui"
-version = "1.0.0-alpha.2"
+name = "titanium_desktop_gui"
+version = "1.0.0-alpha.3"
 edition = "2021"
 
 [dependencies.titaniumutils]
 package = "titanium_utils"
-path = "../utils"
+path = "../../utils"
 
 [target.'cfg(windows)'.dependencies.titaniumkeybinds]
-package = "titanium_keybinds"
+package = "titanium_desktop_keybinds"
 path = "../keybinds"
 
-[dependencies.titaniumcore]
-package = "titanium_core"
-path = "../core"
+[dependencies.titaniummemory]
+package = "titanium_desktop_memory"
+path = "../memory"
+
+[dependencies.titaniumcommon]
+package = "titanium_common"
+path = "../../common"
 
 [dependencies.druid]
 version = "0.8"
@@ -27,7 +31,7 @@ winres = "0.1"
 
 [build-dependencies.titaniumutils]
 package = "titanium_utils"
-path = "../utils"
+path = "../../utils"
 
 [package.metadata.winres]
 OriginalFilename = "Titanium"

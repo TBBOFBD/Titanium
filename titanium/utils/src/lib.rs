@@ -41,5 +41,6 @@ pub fn getAssetFromRoot<T: ToString>(name: T) -> Result<String, Box<dyn std::err
 
 #[cfg(feature = "assets")]
 pub mod assets {
-    pub use libassets::*;
+    #[cfg(feature = "assets")]
+    pub use titaniumassets::*;
 }

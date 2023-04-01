@@ -1,6 +1,6 @@
 [package]
 name = "titanium"
-version = "1.0.0-alpha.2"
+version = "1.0.0-alpha.3"
 edition = "2021"
 
 [lib]
@@ -25,10 +25,20 @@ version = "1.12"
 optional = true
 
 [dependencies.titaniumutils]
-path = "./titanium/desktop/utils"
+path = "./titanium/utils"
 package = "titanium_utils"
 default-features = false
 features = ["macros"]
+
+[dependencies.titaniumassets]
+path = "./titanium/assets"
+package = "titanium_assets"
+optional = true
+
+[dependencies.titaniumcommon]
+path = "./titanium/common"
+package = "titanium_common"
+optional = true
 
 [dependencies.titaniumdesktop]
 path = "./titanium/desktop"
@@ -41,8 +51,9 @@ package = "titanium_web"
 optional = true
 
 [features]
-default = ["macros"]
+default = ["macros", "core"]
 
+core = ["titaniumcommon", "titaniumassets"]
 macros = ["titaniummacros", "async-std"]
 
 desktop = ["titaniumdesktop"]

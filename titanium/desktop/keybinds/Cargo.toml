@@ -1,12 +1,12 @@
 [package]
-name = "titanium_keybinds"
-version = "1.0.0-alpha.2"
+name = "titanium_desktop_keybinds"
+version = "1.0.0-alpha.3"
 edition = "2021"
 
 [dependencies.titaniumutils]
 package = "titanium_utils"
 default-features = false
-path = "../utils"
+path = "../../utils"
 features = [
     "macros"
 ]
