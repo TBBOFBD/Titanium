@@ -1,6 +1,6 @@
 [package]
 name = "macros"
-version = "1.0.0-alpha.2"
+version = "1.0.0-alpha.3"
 edition = "2021"
 
 [lib]
@@ -9,8 +9,8 @@ path = "lib.rs"
 proc-macro = true
 
 [dependencies.quote]
-version = "1.0"
+version = "1"
 
 [dependencies.syn]
-version = "2.0"
+version = "2"
 features = ["full"]

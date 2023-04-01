@@ -13,6 +13,7 @@ use druid::{
     Lens, ImageBuf,
 };
 
+/// The default AppState for the default GUI implementation.
 #[derive(Debug, Clone, Data, Lens)]
 pub struct AppState {}
 

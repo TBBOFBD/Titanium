@@ -1,5 +1,5 @@
 //! USE THIS SCRIPT TO GENERATE THE STATIC ASSET FILES
-//! This script will generate a file called lib.rs in "titanium/desktop/assets/"
+//! This script will generate a file called lib.rs in "titanium/assets/"
 
 use std::io::Write;
 use std::fs;
@@ -19,6 +19,11 @@ fn main() -> std::io::Result<()> {
         match path {
             Ok(p) => {
                 let asset_file = p.path().to_str().unwrap().to_string();
+
+                if asset_file.ends_with(".rs") || asset_file.ends_with(".toml") {
+                    continue;
+                }
+
                 let asset_file = asset_file.replace("\\", "/");
                 let name = asset_file.split("/").last().unwrap().to_string();
                 let name = name.replace(".", "_");
@@ -37,7 +42,7 @@ fn main() -> std::io::Result<()> {
         }
     }
 
-    let mut file = fs::File::create("../desktop/assets/lib.rs")?;
+    let mut file = fs::File::create("../assets/lib.rs")?;
     let mut output = String::new();
     for asset in assets {
         output.push_str(const_builder(&asset).as_str());

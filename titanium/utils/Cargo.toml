@@ -1,0 +1,16 @@
+[package]
+name = "titanium_utils"
+version = "1.0.0-alpha.3"
+edition = "2021"
+
+[dependencies.titaniumassets]
+package = "titanium_assets"
+path = "../assets"
+optional = true
+
+[features]
+default = ["full"]
+full = ["assets", "macros"]
+
+macros = []
+assets = ["titaniumassets"]

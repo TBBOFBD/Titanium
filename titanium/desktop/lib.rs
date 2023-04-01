@@ -10,7 +10,7 @@
 
 #![deny(unsafe_code)]
 
-pub use titaniumcore::*;
+pub use titaniummemory::*;
 
 #[cfg(feature = "gui")]
 pub mod gui {

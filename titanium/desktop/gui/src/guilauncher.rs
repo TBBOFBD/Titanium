@@ -3,8 +3,11 @@ use crate::{
     libdruid
 };
 
+/// A struct that can be used to launch the GUI.
+#[derive(Debug)]
 pub struct GuiLauncher;
 impl GuiLauncher {
+    /// Launches the GUI with the given window and initial state.
     pub fn launch<State: libdruid::Data>(main_window: GuiInstance<State>) -> Result<(), libdruid::PlatformError> {
         let launcher = libdruid::AppLauncher::with_window(
             main_window.window
@@ -14,6 +17,7 @@ impl GuiLauncher {
         )
     }
 
+    /// Launches the GUI with the given window and initial state.
     pub fn custom<State: libdruid::Data>(main_window: GuiInstance<State>) -> (
         libdruid::AppLauncher<State>,
         State

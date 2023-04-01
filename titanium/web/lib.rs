@@ -27,7 +27,7 @@
 //! }
 //! ```
 
-#![warn(missing_docs)]
+#![deny(missing_docs,missing_debug_implementations,unused,clippy::all)]
 
 pub use tide::Result;
 
