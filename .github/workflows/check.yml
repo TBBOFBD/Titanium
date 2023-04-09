@@ -20,7 +20,7 @@ jobs:
           profile: minimal
           toolchain: nightly
       - name: Install Dependencies
-        run: sudo apt-get install libx11-dev libxtst-dev libudev-dev libinput-dev libudev-dev -y
+        run: sudo apt-get install libsdl-pango-dev libx11-dev libxtst-dev libudev-dev libinput-dev libudev-dev -y
       - name: Build
         run: cargo build --workspace --all-features
 
