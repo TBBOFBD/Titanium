@@ -6,7 +6,6 @@ on:
       - main
   workflow_dispatch:
 
-
 permissions:
   contents: write
   pages: write
@@ -17,10 +16,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
+    name: Common Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -31,16 +28,19 @@ jobs:
           profile: minimal
           toolchain: nightly
       - name: Install Dependencies
-        run: sudo apt-get install libgtk-3-dev libudev-dev -y
+        run: sudo apt-get install libgtk-3-dev libsdl-pango-dev libx11-dev libxtst-dev libudev-dev libinput-dev -y
       - name: Build
         run: cargo build --workspace --all-features
 
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
       - run: cargo doc --workspace --no-deps
-      - uses: "finnp/create-file-action@master"
-        env:
-          FILE_NAME: "./target/doc/index.html"
-          FILE_DATA: '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=''./titanium''"/></head></html>' # Redirect to default page
-
       - name: Setup Pages
         uses: actions/configure-pages@v2
       - name: Upload artifact

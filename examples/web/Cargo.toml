@@ -1,15 +1,14 @@
 [package]
-name = "web"
+name = "example_web"
 version = "0.1.0"
 edition = "2021"
 
 [[bin]]
+name = "example_web"
 path = "main.rs"
-name = "web"
 
 [dependencies.titanium]
 features = [
-    "web",
     "web-full"
 ]
 path = "../../"

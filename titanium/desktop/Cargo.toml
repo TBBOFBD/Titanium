@@ -1,10 +1,17 @@
 [package]
 name = "titanium_desktop"
-version = "1.0.0-alpha.3"
+version = "1.0.0-alpha.4"
 edition = "2021"
 
 [lib]
 path = "lib.rs"
+
+[dependencies.titaniumutils]
+package = "titanium_utils"
+path = "../utils"
+optional = false
+default-features = false
+features = ["macros"]
 
 [dependencies.titaniummemory]
 package = "titanium_desktop_memory"
@@ -21,10 +28,22 @@ package = "titanium_desktop_gui"
 path = "./gui"
 optional = true
 
+[dependencies.titaniumdiscord]
+package = "titanium_desktop_discord"
+path = "./discord"
+optional = true
+
+[dependencies.titaniumkeybinds]
+package = "titanium_desktop_keybinds"
+path = "./keybinds"
+optional = true
+
 [features]
 default = ["common", "memory"]
-full = ["gui", "memory", "common"]
+full = ["memory", "common", "gui", "discord", "keybinds"]
 
 common = ["titaniumcommon"]
 memory = ["titaniummemory"]
+discord = ["titaniumdiscord"]
+keybinds = ["titaniumkeybinds"]
 gui = ["titaniumgui"]

@@ -8,11 +8,22 @@
 //! }
 //! ```
 
-#![deny(unsafe_code)]
-
-pub use titaniummemory::*;
-
-#[cfg(feature = "gui")]
-pub mod gui {
-    pub use titaniumgui::*;
-}
+titaniumutils::declare_module!(
+    ///Memory utilities
+    "memory" > memory <= titaniummemory
+);
+titaniumutils::declare_module!(
+    /// GUI utilities
+    "gui" > gui <= titaniumgui
+);
+titaniumutils::declare_module!(
+    /// Module for discord utilities
+    /// # Example
+    /// ```rust,no_run
+    /// 
+    "discord" > discord <= titaniumdiscord
+);
+titaniumutils::declare_module!(
+    /// Module for Keybinds
+    "keybinds" > keybinds <= titaniumkeybinds
+);

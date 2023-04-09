@@ -1,7 +1,7 @@
 /**
  * @author AtomicGamer9523
  * @license MIT
- * @version 1.0.0-alpha.3
+ * @version 1.0.0-alpha.4
  * @description Titanium Web API Library
 */
 
@@ -548,7 +548,9 @@ export interface IJSLib {
  * @memberof TITANIUM
  * @description Represents a JSLIB
 */
-export class JSLib implements IJSLib {
+export class JSLib
+    implements IJSLib
+{
     #code: string;
     constructor(code: string) {
         this.#code = code;
@@ -577,7 +579,11 @@ export class JSLib implements IJSLib {
  * @memberof TITANIUM
  * @description class for optional values
 */
-export class Option<T> implements IOption<T> {
+export class Option<
+    T
+>
+    implements IOption<T>
+{
     #valid: boolean;
     #value: T | undefined;
     /**
@@ -699,7 +705,11 @@ export class Option<T> implements IOption<T> {
  * @memberof TITANIUM
  * @description class for event emitters
 */
-export class EventEmitter<E extends EventsType = {}> implements IEventEmitter<E> {
+export class EventEmitter<
+    E extends EventsType = {}
+>
+    implements IEventEmitter<E>
+{
     private _events_: Map<keyof E, Set<Listener>> = new Map();
     public on<K extends keyof E>(event: K, listener: E[K]): this;
     public on(event: EventName, listener: Callback): this {
@@ -785,7 +795,7 @@ export class EventEmitter<E extends EventsType = {}> implements IEventEmitter<E>
                         new Error("Timed out!")
                     )
                 ))
-            ;
+                ;
             this.once(event, listener as any);
         });
     }
@@ -921,8 +931,7 @@ function iConnectionParser(connection?: string | IConnection): IStrictConnection
  * @class
 */
 class ConnctedTitaniumServer
-    implements IConnectedTitaniumServer,
-    IStrictConnectable
+    implements IConnectedTitaniumServer, IStrictConnectable
 {
     #host: string;
     #port: number;

@@ -1,7 +1,13 @@
 [package]
 name = "titanium_desktop_keybinds"
-version = "1.0.0-alpha.3"
+version = "1.0.0-alpha.4"
 edition = "2021"
+
+[dependencies.ctrlc]
+version = "3.2"
+features = [
+    "termination"
+]
 
 [dependencies.titaniumutils]
 package = "titanium_utils"

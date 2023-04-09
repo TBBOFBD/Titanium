@@ -1,0 +1,7 @@
+[package]
+name = "titanium_desktop_discord"
+version = "1.0.0-alpha.4"
+edition = "2021"
+
+[dependencies]
+discord-presence = "0.5"

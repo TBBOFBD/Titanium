@@ -1,0 +1,17 @@
+[package]
+name = "example_desktop_memory"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "example_desktop_memory"
+path = "main.rs"
+
+[dependencies.titanium]
+path = "../../"
+features = [
+    "desktop-memory",
+]
+
+[dependencies]
+# add your dependencies here

@@ -1,6 +1,6 @@
 [package]
 name = "titanium"
-version = "1.0.0-alpha.3"
+version = "1.0.0-alpha.4"
 edition = "2021"
 
 [lib]
@@ -10,7 +10,11 @@ path = "titanium/lib.rs"
 members = [
     "titanium/desktop",
     "titanium/web",
-    "examples/desktop",
+
+    # Examples
+    "examples/desktop_discord",
+    "examples/desktop_memory",
+    "examples/desktop_gui",
     "examples/web",
 ]
 
@@ -58,7 +62,16 @@ macros = ["titaniummacros", "async-std"]
 
 desktop = ["titaniumdesktop"]
 desktop-gui = ["desktop", "titaniumdesktop/gui"]
-desktop-full = ["desktop", "desktop-gui", "titaniumdesktop/full", "macros"]
+desktop-memory = ["desktop", "titaniumdesktop/memory"]
+desktop-discord = ["desktop", "titaniumdesktop/discord"]
+desktop-keybinds = ["desktop", "titaniumdesktop/keybinds"]
+desktop-full = [
+    "desktop-gui",
+    "desktop-memory",
+    "desktop-discord",
+    "desktop-keybinds",
+    "macros"
+]
 
 web = ["titaniumweb"]
 web-socket = ["web", "titaniumweb/socket"]

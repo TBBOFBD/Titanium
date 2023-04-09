@@ -1,6 +1,15 @@
+//! This crate contains the proc macros used by the titanium crate.
+
+#![deny(missing_docs,missing_debug_implementations,unused,clippy::all)]
+
+#[doc(hidden)]
+#[allow(unused_extern_crates)]
 extern crate proc_macro;
+#[doc(hidden)]
 use proc_macro::TokenStream;
+#[doc(hidden)]
 use quote::{quote, quote_spanned};
+#[doc(hidden)]
 use syn::spanned::Spanned;
 
 /// Allows you to have a main function that is async.

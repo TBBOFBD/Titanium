@@ -102,9 +102,9 @@
 })({
     // Common metadata
     NAME: "Titanium",
-    VERSION: "1.0.0-alpha.3",
+    VERSION: "1.0.0-alpha.4",
 
     // Internal metadata
-    DEV_DEBUG: true,
+    DEV_DEBUG: false,
     DEFAULT_API_CDN: "http://localhost:8080/"
 });
