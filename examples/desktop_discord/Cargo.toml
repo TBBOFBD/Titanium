@@ -1,0 +1,18 @@
+[package]
+name = "example_desktop_discord"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "example_desktop_discord"
+path = "main.rs"
+
+[dependencies.titanium]
+path = "../../"
+features = [
+    "desktop-discord",
+    "desktop-keybinds",
+]
+
+[dependencies]
+# add your dependencies here

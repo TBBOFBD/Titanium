@@ -1,0 +1,17 @@
+[package]
+name = "example_desktop_gui"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "example_desktop_gui"
+path = "main.rs"
+
+[dependencies.titanium]
+path = "../../"
+features = [
+    "desktop-gui",
+]
+
+[dependencies]
+# add your dependencies here

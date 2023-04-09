@@ -89,6 +89,7 @@ pub use platform::Pid;
 ///
 /// [`Pid`]: type.Pid.html
 pub use platform::ProcessHandle;
+use sysinfo::PidExt;
 
 /// A trait that attempts to turn some type into a [`ProcessHandle`] so memory can be either copied
 /// or placed into it.
@@ -110,6 +111,12 @@ pub trait TryIntoProcessHandle {
 impl TryIntoProcessHandle for ProcessHandle {
     fn try_into_process_handle(&self) -> std::io::Result<platform::ProcessHandle> {
         Ok(*self)
+    }
+}
+
+impl TryIntoProcessHandle for sysinfo::Pid {
+    fn try_into_process_handle(&self) -> std::io::Result<platform::ProcessHandle> {
+        s2t(*self).try_into_process_handle()
     }
 }
 
@@ -141,7 +148,7 @@ pub trait Memory<T> {
     /// deference, and instead should return a `std::io::Error` with a `std::io::ErrorKind` of
     /// `Other`.
     ///
-    /// # Errors
+    /// # Errorsusize
     /// Returns an error if copying memory fails or if a null pointer dereference would
     /// otherwise occur.
     ///
@@ -186,6 +193,37 @@ pub trait Memory<T> {
     fn write(&self, value: &T) -> std::io::Result<()>;
 }
 
+/// Converts a [`sysinfo::Pid`] to a [`Pid`].
+/// **S**ysinfo to **T**his crate
+pub fn s2t(pid: sysinfo::Pid) -> Pid {
+    #[cfg(target_os = "windows")]
+    {
+        let pid: usize = usize::from(pid);
+        let pid: u32 = pid as u32;
+        let pid: Pid = pid as Pid;
+        return pid;
+    }
+    #[cfg(not(target_os = "windows"))]
+    {
+        let pid: libc::pid_t = pid.as_u32() as libc::pid_t;
+        let pid: Pid = pid as Pid;
+        return pid;
+    }
+}
+
+/// Converts a [`Pid`] to a [`sysinfo::Pid`].
+/// **T**his crate to **S**ysinfo
+pub fn t2s(pid: Pid) -> sysinfo::Pid {
+    #[cfg(target_os = "windows")]
+    {
+        return sysinfo::Pid::from_u32((pid as libc::pid_t) as u32);
+    }
+    #[cfg(not(target_os = "windows"))]
+    {
+        return sysinfo::Pid::from_u32((pid as libc::pid_t) as u32);
+    }
+}
+
 /// Copy `length` bytes of memory at `addr` from `source`.
 ///
 /// This is just a convenient way to call [`CopyAddress::copy_address`] without
@@ -197,4 +235,20 @@ pub fn copy_address<T: CopyAddress>(addr: usize, length: usize, source: &T) -> s
     let mut copy = vec![0; length];
     source.copy_address(addr, &mut copy)?;
     Ok(copy)
+}
+
+/// Attempt to get a [`ProcessHandle`] from a process name.
+pub fn get_handle<T: ToString>(name: T) -> std::io::Result<ProcessHandle> {
+    let name: String = name.to_string();
+    use sysinfo::{ProcessExt, System, SystemExt};
+
+    let mut system = System::new_all();
+
+    // First we update all information of our `System` struct.
+    system.refresh_all();
+    let mut ps = system.processes().iter().filter(|(_, p)| p.name().starts_with(&name));
+    match ps.nth(0) {
+        Some((pid, _)) => (*pid).try_into_process_handle(),
+        None => Err(std::io::Error::new(std::io::ErrorKind::NotFound, "Process not found"))
+    }
 }

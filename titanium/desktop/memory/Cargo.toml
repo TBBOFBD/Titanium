@@ -1,9 +1,10 @@
 [package]
 name = "titanium_desktop_memory"
-version = "1.0.0-alpha.3"
+version = "1.0.0-alpha.4"
 edition = "2021"
 
 [dependencies]
+sysinfo = "0.28"
 libc = "0.2"
 
 [target.'cfg(target_os="macos")'.dependencies]

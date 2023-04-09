@@ -8,13 +8,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  clippy:
-    name: Cargo Clippy
+  build:
+    name: Common Build
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      security-events: write
-      actions: read
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -24,10 +20,19 @@ jobs:
           profile: minimal
           toolchain: nightly
       - name: Install Dependencies
-        run: sudo apt-get install libgtk-3-dev libudev-dev -y
+        run: sudo apt-get install libx11-dev libxtst-dev libudev-dev libinput-dev libudev-dev -y
       - name: Build
         run: cargo build --workspace --all-features
 
+  clippy:
+    name: Cargo Clippy
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    steps:
       - name: Install required cargo
         run: cargo install clippy-sarif sarif-fmt
       - name: Run rust-clippy
