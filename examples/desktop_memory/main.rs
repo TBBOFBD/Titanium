@@ -8,9 +8,6 @@ const SET_TO: u32 = 6;
 fn main() {
     // Injecting ourselves into the process handle (this process, you can also inject into other processes)
     let handle = get_handle(APPNAME).expect("Failed to get process handle");
-    // let handle = (std::process::id() as Pid)
-    //     .try_into_process_handle()
-    //     .expect("Failed to get process handle");
 
     // We make a `DataMember` that has an offset referring to its location in memory
     let member = DataMember::new_offset(handle, vec![OFFSET]);
