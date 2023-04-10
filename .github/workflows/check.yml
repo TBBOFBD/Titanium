@@ -10,7 +10,6 @@ on:
 jobs:
   clippy:
     name: Cargo Clippy
-    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: read
