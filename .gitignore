@@ -18,7 +18,9 @@
 
 #========================================#
 # Build output
+__pycache__
 /.turbobuild
+/.gradle
 /.turbo
 /.build
 /target

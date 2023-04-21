@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'java-library'
+}
+
+project.buildDir = '../.build/java'
+
+application {
+    mainClass = 'main.Main'
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs += ["-Xlint:none"]
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.slf4j:slf4j-api:${project.slf4j_version}"
+    implementation "ch.qos.logback:logback-classic:${project.logback_version}"
+}

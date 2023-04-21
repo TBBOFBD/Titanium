@@ -15,6 +15,10 @@ pub(crate) mod platform;
 #[path = "linux/mod.rs"]
 pub(crate) mod platform;
 
+#[cfg(target_os = "windows")]
+#[path = "windows/util.rs"]
+pub mod winutil;
+
 mod architecture;
 mod data_member;
 mod local_member;
