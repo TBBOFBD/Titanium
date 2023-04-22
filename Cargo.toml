@@ -18,6 +18,12 @@ members = [
     "titanium/macros",
     "titanium/utils",
     "titanium/web",
+
+    #Examples
+    "examples/desktop_discord",
+    "examples/desktop_memory",
+    "examples/desktop_gui",
+    "examples/web",
 ]
 
 [dependencies.titaniummacros]
