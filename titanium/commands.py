@@ -32,13 +32,13 @@ class BuildCommand(Command):
         full_build = False
         if "--full" in cliargs: full_build = True
 
-        def build_desktop():
+        def build_desktop(full_build: bool = False):
             config: list[str] = (
                 ["--config \"target.'cfg(not(target_os=\\\"windows\\\"))'.runner='sudo'\""]
                 if metadata.triple.split("-")[2] == "linux" else
                 []
             )
-            cmd = f"""cargo +nightly {(" ".join(config))} build -Z unstable-options --target-dir .build/rust --out-dir .build/bin --target {metadata.triple}"""
+            cmd = f"""cargo +nightly {(" ".join(config))} build -Z unstable-options --target-dir .build/rust --out-dir .build/bin --target {metadata.triple} {"" if not full_build else "--all-features"}"""
             os.system(cmd)
             return HANDLED
         
@@ -51,15 +51,11 @@ class BuildCommand(Command):
             return HANDLED
         
         if full_build:
-            LOG.log("Full build requested! Are you sure you want to do this? (y/n)")
-            INPUT = input()
-            if INPUT.lower() != "y":
-                LOG.log("Aborting...")
-                return HANDLED
+            LOG.log("Full build requested! THIS WILL TAKE A WHILE!")
             LOG.log("Cleaning...")
             CLEAN.run([])
             LOG.log("Building...")
-            build_desktop()
+            build_desktop(True)
             build_web()
             build_jvm()
             LOG.log("Done!")
@@ -91,6 +87,8 @@ class CleanCommand(Command):
             shutil.rmtree(".build")
             shutil.rmtree("./titanium/utils/__pycache__")
             shutil.rmtree("./titanium/__pycache__")
+        except Exception: pass
+        try: os.remove("Cargo.lock")
         except Exception: pass
         LOG.log("Done!")
         return HANDLED
@@ -159,6 +157,38 @@ class StartCommand(Command):
         
         def as_lib() -> bool:
             LOG.log("Setting up project as a library...")
+            if os.path.exists("main"):
+                import shutil
+                try: shutil.rmtree("main")
+                except Exception: pass
+                f = open("Cargo.toml", "r")
+                OLD_FILE = f.read()
+                f.close()
+                f = open("Cargo.toml", "r")
+                newData = f.readlines()
+                f.close()
+                shouldWriteNextLine = False
+                for line in range(len(newData)):
+                    if shouldWriteNextLine:
+                        newData[line] = ""
+                        newData[line+1] = ""
+                        newData[line+2] = "\n"
+                        shouldWriteNextLine = False
+                    if "#"+"?RESERVED_FOR_TITANIUM_FRAMEWORK_START" in newData[line]: shouldWriteNextLine = True
+                    if "#"+"?RESERVED_FOR_TITANIUM_FRAMEWORK_END" in newData[line]: shouldWriteNextLine = False
+                FILE = open("Cargo.toml", "wt")
+                FILE.write("".join(newData))
+                FILE.close()
+                backup = open("Cargo.toml", "rt")
+                backupData = backup.read()
+                if ("#" + "!TITANIUM_OK") not in backupData:
+                    LOG.log("File not updated successfully, rolling back...")
+                    LOG.log();LOG.log();LOG.log(f"{COLORS.FAIL}THIS IS A BUG, PLEASE REPORT IT TO THE TITANIUM DEVELOPERS{COLORS.ENDC}")
+                    f = open("Cargo.toml", "wt")
+                    f.write(OLD_FILE)
+                    f.close()
+                backup.close()
+            LOG.log("Done!")
             return HANDLED
 
         if "lib" in cliargs[0]: return as_lib()
@@ -172,8 +202,12 @@ class RunCommand(Command):
     )
     def run(self, cliargs: list[str]) -> bool:
         if h(self.name, cliargs, False): return HANDLED
-        CMD = "RUSTFLAGS=\"-Z macro-backtrace\" cargo +nightly -Z unstable-options run"
-        os.system(CMD)
+        if os.path.exists("main"):
+            CMD = "RUSTFLAGS=\"-Z macro-backtrace\" cargo +nightly -Z unstable-options run"
+            os.system(CMD)
+        else:
+            LOG.log("Project is not set up as a framework!")
+            LOG.log("Use the start command to set it up as a framework.")
         return HANDLED
 
 BUILD = BuildCommand()

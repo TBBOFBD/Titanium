@@ -1,7 +1,6 @@
 if __name__ != "__main__": raise Exception("Titanium is not a module!")
 import sys
-TITLE = "Titanium 1.0.0-alpha.4"
-DEBUG_MODE = sys.argv.__contains__("-Fdebug")
+DEBUG_MODE = "-Fdebug" in sys.argv
 try:
     import platform, shutil, sys, os
     from enum import Enum
@@ -127,10 +126,11 @@ try:
             shutil.rmtree("./titanium/__pycache__")
         except Exception: print("Clean Failed!")
     def main() -> bool:
+        def argfilter(x: str): return not (x == "-Fdebug" or x == "--clean")
         import titanium
         should_clean: bool = False
-        SYSARGS = list(filter(lambda x: x != "-Fdebug",sys.argv))
-        if "--clean" in SYSARGS or "-c" in SYSARGS : should_clean = True
+        if "--clean" in sys.argv: should_clean = True
+        SYSARGS = list(filter(argfilter,sys.argv))
         if len(SYSARGS) < 2: cmd = "help"
         else: cmd = str(SYSARGS[1])
         if cmd.startswith("-h") or cmd.startswith("--help"): cmd = "help"
