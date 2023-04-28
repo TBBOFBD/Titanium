@@ -8,9 +8,16 @@ on:
   workflow_dispatch:
 
 jobs:
-  linux:
-    name: Linux
-    runs-on: ubuntu-latest
+  setup:
+    name: Setup
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [
+          ubuntu-latest,
+          windows-latest,
+          macos-latest
+        ]
     permissions:
       contents: read
       security-events: write
@@ -27,6 +34,16 @@ jobs:
         with:
           profile: minimal
           toolchain: nightly
+
+  linux:
+    name: Linux
+    runs-on: ubuntu-latest
+    needs: setup
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    steps:
       - name: Install Dependencies
         run: python x.py installDeps
       - name: Build
@@ -58,22 +75,12 @@ jobs:
   windows:
     name: Windows
     runs-on: windows-latest
+    needs: setup
     permissions:
       contents: read
       security-events: write
       actions: read
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-      - name: Install Toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: nightly
       - name: Install Dependencies
         run: python x.py installDeps
       - name: Build
@@ -81,23 +88,13 @@ jobs:
   
   macos:
     name: MacOS
+    needs: setup
     runs-on: macos-latest
     permissions:
       contents: read
       security-events: write
       actions: read
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-      - name: Install Toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: nightly
       - name: Install Dependencies
         run: python x.py installDeps
       - name: Build
