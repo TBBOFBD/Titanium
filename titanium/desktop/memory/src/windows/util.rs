@@ -30,7 +30,10 @@ pub enum InjectDllIntoProcessError {
     DllPathBufferAllocationFailed,
     /// Failed to write dll path to process memory
     #[error("Writing process memory failed (code: {err_code:?})")]
-    WritingProcessMemoryFailed { err_code: i32 },
+    WritingProcessMemoryFailed {
+        /// The error code
+        err_code: i32
+    },
     /// Failed to get kernel32 handle
     #[error("Kernel32 not found")]
     Kernel32NotFound,

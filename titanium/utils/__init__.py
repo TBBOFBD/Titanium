@@ -136,7 +136,7 @@ def failableRun(cmd: str):
     res = os.system(cmd)
     if res != 0:
         LOG.log(COLORS.FAIL+"Failed to run command: "+COLORS.ENDC+cmd)
-        exit(res)
+        exit(1)
 COMMANDS = CommandGroup()
 LOG = Logger(print)
 
