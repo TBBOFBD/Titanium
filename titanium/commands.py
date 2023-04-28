@@ -209,12 +209,24 @@ class RunCommand(Command):
             LOG.log("Project is not set up as a framework!")
             LOG.log("Use the start command to set it up as a framework.")
         return HANDLED
+class InstallDepsCommand(Command):
+    def __init__(self) -> None: super().__init__("install-deps",
+        simple = "installs dependencies",
+        description = f"""Installs dependencies. This command is the same as {COLORS.OKCYAN}cargo +nightly -Z unstable-options check{COLORS.ENDC}""",
+        color = COLORS.OKGREEN
+    )
+    def run(self, cliargs: list[str]) -> bool:
+        meta = Metadata.get([])
+        if "linux" in meta.triple:
+            os.system("sudo apt-get install libgtk-3-dev libsdl-pango-dev libx11-dev libxtst-dev libudev-dev libinput-dev -y")
+        return HANDLED
 
 BUILD = BuildCommand()
 CLEAN = CleanCommand()
 HELP = HelpCommand()
 START = StartCommand()
 RUN = RunCommand()
+INSTALL_DEPS = InstallDepsCommand()
 
 
 # 

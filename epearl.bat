@@ -49,9 +49,9 @@ set PYTHON_EXE=python.exe
 if "%ERRORLEVEL%" == "0" goto execute
 
 echo.
-echo ERROR: no 'rustc' command could be found in your PATH.
+echo ERROR: no 'python' command could be found in your PATH.
 echo.
-echo Please install rust
+echo Please install python
 
 :execute
 

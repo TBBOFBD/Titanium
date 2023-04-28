@@ -2,6 +2,8 @@ if __name__ != "titanium": raise Exception("This file is not meant to be run dir
 from titanium.commands import *
 from titanium.utils import *
 
+VERSION = "1.0.0-alpha.5"
+
 COMMANDS.add(HELP)
 COMMANDS.add(RUN)
 COMMANDS.add(BUILD)
@@ -27,6 +29,13 @@ def command_parser(cmd: str, args: list[str]) -> bool:
     
     elif cmd.startswith("run") or cmd.startswith("r"):
         if RUN.run(args): return HANDLED
+
+    elif cmd.startswith("version") or cmd.startswith("v"):
+        print(f"Titanium version {VERSION}")
+        return HANDLED
+    
+    elif cmd.startswith("installDeps"):
+        return INSTALL_DEPS.run(args)
 
     return NOT_HANDLED
 
