@@ -28,8 +28,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10' 
-        run: python x.py
+          python-version: '3.10'
       - name: Install Toolchain
         uses: actions-rs/toolchain@v1
         with:
