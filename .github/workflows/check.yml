@@ -10,14 +10,7 @@ on:
 jobs:
   setup:
     name: Setup
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [
-          ubuntu-latest,
-          windows-latest,
-          macos-latest
-        ]
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       security-events: write
@@ -61,3 +54,27 @@ jobs:
         with:
           sarif_file: rust-clippy-results.sarif
           wait-for-processing: true
+  
+  testwindows:
+    name: Windows
+    runs-on: windows-latest
+    needs: setup
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    steps:
+      - name: Build
+        run: python x.py build full
+  
+  testmacos:
+    name: macOS
+    runs-on: macos-latest
+    needs: setup
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    steps:
+      - name: Build
+        run: python x.py build full
