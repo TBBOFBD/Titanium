@@ -58,7 +58,7 @@ jobs:
   testwindows:
     name: Windows
     runs-on: windows-latest
-    needs: [setup, clippy]
+    needs: setup
     permissions:
       contents: read
       security-events: write
@@ -70,7 +70,7 @@ jobs:
   testmacos:
     name: macOS
     runs-on: macos-latest
-    needs: [setup, clippy]
+    needs: [setup, windows]
     permissions:
       contents: read
       security-events: write
