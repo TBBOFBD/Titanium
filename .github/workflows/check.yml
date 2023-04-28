@@ -8,8 +8,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  setup:
-    name: Setup
+  linux:
+    name: Linux
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -35,7 +35,7 @@ jobs:
   clippy:
     name: Cargo Clippy
     runs-on: ubuntu-latest
-    needs: setup
+    needs: linux
     permissions:
       contents: read
       security-events: write
@@ -55,10 +55,9 @@ jobs:
           sarif_file: rust-clippy-results.sarif
           wait-for-processing: true
   
-  testwindows:
+  windows:
     name: Windows
     runs-on: windows-latest
-    needs: setup
     permissions:
       contents: read
       security-events: write
@@ -80,10 +79,9 @@ jobs:
       - name: Build
         run: python x.py build full
   
-  testmacos:
-    name: macOS
+  macos:
+    name: MacOS
     runs-on: macos-latest
-    needs: [setup, testwindows]
     permissions:
       contents: read
       security-events: write
