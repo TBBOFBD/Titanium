@@ -1,7 +1,7 @@
 /**
  * @author AtomicGamer9523
  * @license MIT
- * @version 1.0.0-alpha.4
+ * @version 1.0.0-alpha.5
  * @description Titanium Web API Library
 */
 

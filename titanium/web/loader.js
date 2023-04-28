@@ -102,7 +102,7 @@
 })({
     // Common metadata
     NAME: "Titanium",
-    VERSION: "1.0.0-alpha.4",
+    VERSION: "1.0.0-alpha.5",
 
     // Internal metadata
     DEV_DEBUG: false,
