@@ -64,6 +64,19 @@ jobs:
       security-events: write
       actions: read
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install Toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: nightly
+      - name: Install Dependencies
+        run: python x.py installDeps
       - name: Build
         run: python x.py build full
   
@@ -76,5 +89,18 @@ jobs:
       security-events: write
       actions: read
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install Toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: nightly
+      - name: Install Dependencies
+        run: python x.py installDeps
       - name: Build
         run: python x.py build full
