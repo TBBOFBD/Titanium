@@ -15,6 +15,10 @@ pub(crate) mod platform;
 #[path = "linux/mod.rs"]
 pub(crate) mod platform;
 
+#[cfg(target_os = "windows")]
+#[path = "windows/util.rs"]
+pub mod winutil;
+
 mod architecture;
 mod data_member;
 mod local_member;
@@ -216,7 +220,7 @@ pub fn s2t(pid: sysinfo::Pid) -> Pid {
 pub fn t2s(pid: Pid) -> sysinfo::Pid {
     #[cfg(target_os = "windows")]
     {
-        return sysinfo::Pid::from_u32((pid as libc::pid_t) as u32);
+        return sysinfo::Pid::from_u32((pid as libc::c_int) as u32);
     }
     #[cfg(not(target_os = "windows"))]
     {

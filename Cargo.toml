@@ -1,17 +1,25 @@
 [package]
 name = "titanium"
-version = "1.0.0-alpha.4"
+version = "1.0.0-alpha.5"
 edition = "2021"
 
 [lib]
-path = "titanium/lib.rs"
+path = "titanium/src/lib.rs"
+
+#?RESERVED_FOR_TITANIUM_FRAMEWORK_START
+
+#?RESERVED_FOR_TITANIUM_FRAMEWORK_END
 
 [workspace]
 members = [
+    "titanium/assets",
+    "titanium/common",
     "titanium/desktop",
+    "titanium/macros",
+    "titanium/utils",
     "titanium/web",
 
-    # Examples
+    #Examples
     "examples/desktop_discord",
     "examples/desktop_memory",
     "examples/desktop_gui",
@@ -55,11 +63,13 @@ package = "titanium_web"
 optional = true
 
 [features]
-default = ["macros", "core"]
+default = ["basic"]
 
+basic = ["macros", "core"]
 core = ["titaniumcommon", "titaniumassets"]
 macros = ["titaniummacros", "async-std"]
 
+# Desktop Target
 desktop = ["titaniumdesktop"]
 desktop-gui = ["desktop", "titaniumdesktop/gui"]
 desktop-memory = ["desktop", "titaniumdesktop/memory"]
@@ -73,6 +83,9 @@ desktop-full = [
     "macros"
 ]
 
+# Web Target
 web = ["titaniumweb"]
 web-socket = ["web", "titaniumweb/socket"]
 web-full = ["web", "web-socket", "titaniumweb/full", "macros"]
+
+#!TITANIUM_OK

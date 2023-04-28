@@ -1,6 +1,6 @@
 [package]
 name = "titanium_desktop_keybinds"
-version = "1.0.0-alpha.4"
+version = "1.0.0-alpha.5"
 edition = "2021"
 
 [dependencies.ctrlc]
@@ -17,6 +17,6 @@ features = [
     "macros"
 ]
 
-[dependencies.inputbot]
+[target.'cfg(not(target_os = "macos"))'.dependencies.inputbot]
 git = "https://github.com/obv-mikhail/InputBot"
 branch = "develop"

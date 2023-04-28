@@ -19,6 +19,7 @@ Lowest: <img src="https://img.shields.io/github/labels/AtomicGamer9523/Titanium/
 -===== Type =====-
 Desktop: <img src="https://img.shields.io/github/labels/AtomicGamer9523/Titanium/T-Desktop", alt="T-Desktop">
 Web: <img src="https://img.shields.io/github/labels/AtomicGamer9523/Titanium/T-Web", alt="T-Web">
+JVM: <img src="https://img.shields.io/github/labels/AtomicGamer9523/Titanium/T-JVM", alt="T-JVM">
 -->
 </h1><h3><details open><summary>Changes</summary><br><ul>
 <!-- Add additions here like this:

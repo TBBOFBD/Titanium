@@ -1,6 +1,6 @@
 [package]
 name = "titanium_desktop_gui"
-version = "1.0.0-alpha.4"
+version = "1.0.0-alpha.5"
 edition = "2021"
 
 [dependencies.titaniumutils]
@@ -20,7 +20,8 @@ package = "titanium_common"
 path = "../../common"
 
 [dependencies.druid]
-version = "0.8"
+git = "https://github.com/AtomicGamer9523/druid"
+# version = "0.8"
 features = [
     "image-all"
 ]

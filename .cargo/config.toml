@@ -1,5 +1,8 @@
-[target.'cfg(not(target_os = "windows"))']
-runner = "sudo"
+# [target.'cfg(not(target_os = "windows"))']
+# runner = "sudo"
 
-[target.'cfg(target_os = "windows")']
-# todo: windows
+# [target.'cfg(target_os = "windows")']
+# # todo: windows
+
+[build]
+target-dir = ".build/rust"

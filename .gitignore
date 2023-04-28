@@ -1,31 +1,33 @@
 #========================================#
 # Large amounts of code / logs
-/node_modules
-/corelogs
+node_modules
+corelogs
 #========================================#
 
 #========================================#
 # IDE specific files
-/.vscode
-/.idea
-/.vs
+.vscode
+.idea
+.vs
 #========================================#
 
 #========================================#
 # Private data
-/private
+private
 #========================================#
 
 #========================================#
 # Build output
-/.turbobuild
-/.turbo
-/.build
-/target
-/build
-/dist
-/out
-/bin
+__pycache__
+.turbobuild
+.gradle
+.turbo
+.build
+target
+build
+dist
+out
+bin
 #========================================#
 
 #========================================#

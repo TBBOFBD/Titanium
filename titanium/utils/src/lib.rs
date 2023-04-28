@@ -3,6 +3,7 @@
 #![deny(missing_docs,missing_debug_implementations,unused,clippy::all)]
 
 #[cfg(feature = "assets")]
+#[allow(clippy::needless_return)]
 fn load_asset_from<T: ToString>(path: &str, name: T) -> Result<String, Box<dyn std::error::Error + Send + Sync>> {
     let cd = std::env::current_dir()?;
     let item = cd.join(

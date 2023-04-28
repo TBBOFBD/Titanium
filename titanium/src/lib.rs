@@ -63,3 +63,11 @@ pub mod __internals__ {
     #[cfg(feature = "macros")]
     pub use async_std::task::block_on as run_main;
 }
+
+/// A basic macro for printing "Hello Titanium world!"
+#[macro_export]
+macro_rules! hello_world {
+    () => {
+        println!("Hello Titanium world!");
+    };
+}
