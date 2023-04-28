@@ -16,13 +16,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  setup:
-    name: Setup
+  deploy:
+    name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      security-events: write
-      actions: read
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -37,18 +36,8 @@ jobs:
           toolchain: nightly
       - name: Install Dependencies
         run: python x.py installDeps
-      - name: Build
-        run: python x.py build full
-
-  deploy:
-    name: Deploy to GitHub Pages
-    runs-on: ubuntu-latest
-    needs: setup
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - run: cargo doc --workspace --no-deps
+      - name: Doc
+        run: cargo doc --workspace --no-deps
       - name: Setup Pages
         uses: actions/configure-pages@v2
       - name: Upload artifact
