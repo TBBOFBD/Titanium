@@ -10,9 +10,10 @@ use std::{
 
 type Result<T> = std::result::Result<T, Box<dyn Error>>;
 
-#[allow(dead_code)]
 /// A wrapper struct for the functionality contained in the
 /// underlying [`DiscordIpc`](trait@DiscordIpc) trait.
+#[allow(dead_code)]
+#[derive(Debug)]
 pub struct DiscordRPCClient {
     /// Client ID of the IPC client.
     pub client_id: String,
