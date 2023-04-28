@@ -12,12 +12,12 @@ jobs:
     name: Setup
     runs-on: ${{ matrix.os }}
     strategy:
-        matrix:
-          os: [
-            ubuntu-latest,
-            windows-latest,
-            macos-latest
-          ]
+      matrix:
+        os: [
+          ubuntu-latest,
+          windows-latest,
+          macos-latest
+        ]
     permissions:
       contents: read
       security-events: write
@@ -25,15 +25,20 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10' 
+        run: python x.py
       - name: Install Toolchain
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
           toolchain: nightly
       - name: Install Dependencies
-        run: ./epearl installDeps
+        run: python x.py installDeps
       - name: Build
-        run: ./epearl build full
+        run: python x.py build full
 
   clippy:
     name: Cargo Clippy
