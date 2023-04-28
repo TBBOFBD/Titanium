@@ -51,5 +51,4 @@ done
 
 APP_HOME=$( cd "${APP_HOME:-./}" && pwd -P ) || exit
 
-
 exec "python" "$APP_HOME/x.py" "$@"

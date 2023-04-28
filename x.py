@@ -4,7 +4,7 @@ DEBUG_MODE = "-Fdebug" in sys.argv
 try:
     import platform, shutil, sys, os
     from enum import Enum
-    BUILD_DIR = f"{os.getcwd()}/.build"
+    BUILD_DIR = os.getcwd()+"/.build"
     if not os.path.exists(BUILD_DIR):
         try: os.makedirs(BUILD_DIR)
         except Exception as e:
