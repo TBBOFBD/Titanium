@@ -4,6 +4,7 @@
 
 /// Keybinds for Titanium.
 /// Mostly used for creating shortcuts.
+#[cfg(not(target_os = "macos"))]
 pub mod keys {
     pub use inputbot::{
         KeySequence, 

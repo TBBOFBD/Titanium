@@ -17,6 +17,6 @@ features = [
     "macros"
 ]
 
-[dependencies.inputbot]
+[target.'cfg(not(target_os = "macos"))'.dependencies.inputbot]
 git = "https://github.com/obv-mikhail/InputBot"
 branch = "develop"

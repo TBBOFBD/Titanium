@@ -32,7 +32,7 @@ class BuildCommand(Command):
         full_build = False
         if "full" in cliargs:
             full_build = True
-            print("Full build requested! THIS WILL TAKE A WHILE!")
+            LOG.log("Full build requested! THIS WILL TAKE A WHILE!")
 
         def build_desktop(full_build: bool = False):
             config: list[str] = (

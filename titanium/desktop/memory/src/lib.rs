@@ -220,7 +220,7 @@ pub fn s2t(pid: sysinfo::Pid) -> Pid {
 pub fn t2s(pid: Pid) -> sysinfo::Pid {
     #[cfg(target_os = "windows")]
     {
-        return sysinfo::Pid::from_u32((pid as libc::pid_t) as u32);
+        return sysinfo::Pid::from_u32((pid as libc::c_int) as u32);
     }
     #[cfg(not(target_os = "windows"))]
     {
