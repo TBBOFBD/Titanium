@@ -70,7 +70,7 @@ jobs:
   testmacos:
     name: macOS
     runs-on: macos-latest
-    needs: [setup, windows]
+    needs: [setup, testwindows]
     permissions:
       contents: read
       security-events: write
