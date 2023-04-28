@@ -1,3 +1,5 @@
+//! Utility functions for Windows
+
 #![cfg(target_os = "windows")]
 #![allow(unused_imports)]
 
@@ -11,22 +13,31 @@ use winapi::um::memoryapi::{VirtualAllocEx, WriteProcessMemory};
 use winapi::um::processthreadsapi::{CreateRemoteThread, OpenProcess};
 use winapi::um::winnt::{MEM_COMMIT, PAGE_EXECUTE_READWRITE, PROCESS_ALL_ACCESS};
 
+/// The error type for [`inject_dll_into_process`]
 #[derive(Debug, thiserror::Error)]
 pub enum InjectDllIntoProcessError {
+    /// Failed to canonicalize dll path
     #[error("Failed to canonicalize dll path")]
     DllPathCanonicalizationFailed(std::io::Error),
+    /// Failed to convert dll path to string
     #[error("Failed to stringify dll path")]
     DllPathToStrFailed,
+    /// Failed to open process
     #[error("Open process failed")]
     OpenProcessFailed,
+    /// Failed to allocate memory in process
     #[error("Dll path buffer allocation failed")]
     DllPathBufferAllocationFailed,
+    /// Failed to write dll path to process memory
     #[error("Writing process memory failed (code: {err_code:?})")]
     WritingProcessMemoryFailed { err_code: i32 },
+    /// Failed to get kernel32 handle
     #[error("Kernel32 not found")]
     Kernel32NotFound,
+    /// Failed to get LoadLibraryA address
     #[error("LoadLibraryA not found")]
     LoadLibraryANotFound,
+    /// Failed to get CreateRemoteThread address
     #[error("Failed to create remote thread")]
     FailedToCreateRemoteThread,
 }

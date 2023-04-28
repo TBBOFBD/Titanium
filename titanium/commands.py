@@ -41,7 +41,7 @@ class BuildCommand(Command):
                 []
             )
             cmd = f"""cargo +nightly {(" ".join(config))} build -Z unstable-options --target-dir .build/rust --out-dir .build/bin --target {metadata.triple} {"" if not full_build else "--all-features"}"""
-            os.system(cmd)
+            failableRun(cmd)
             return HANDLED
         
         def build_web():
@@ -84,7 +84,7 @@ class CleanCommand(Command):
         if h(self.name, cliargs, False): return HANDLED
         LOG.log("Cleaning...")
         CMD = "cargo +nightly -Z unstable-options clean --quiet"
-        os.system(CMD)
+        failableRun(CMD)
         try:
             shutil.rmtree(".build")
             shutil.rmtree("./titanium/utils/__pycache__")
@@ -153,7 +153,7 @@ class StartCommand(Command):
                 f.write(OLD_FILE)
                 f.close()
             backup.close()
-            os.system("cargo +nightly -Z unstable-options check")
+            failableRun("cargo +nightly -Z unstable-options check")
             LOG.log("Done!")
             return HANDLED
         
@@ -206,7 +206,7 @@ class RunCommand(Command):
         if h(self.name, cliargs, False): return HANDLED
         if os.path.exists("main"):
             CMD = "RUSTFLAGS=\"-Z macro-backtrace\" cargo +nightly -Z unstable-options run"
-            os.system(CMD)
+            failableRun(CMD)
         else:
             LOG.log("Project is not set up as a framework!")
             LOG.log("Use the start command to set it up as a framework.")
@@ -220,7 +220,7 @@ class InstallDepsCommand(Command):
     def run(self, cliargs: list[str]) -> bool:
         meta = Metadata.get([])
         if "linux" in meta.triple:
-            os.system("sudo apt-get install libgtk-3-dev libsdl-pango-dev libx11-dev libxtst-dev libudev-dev libinput-dev -y")
+            failableRun("sudo apt-get install libgtk-3-dev libsdl-pango-dev libx11-dev libxtst-dev libudev-dev libinput-dev -y")
         return HANDLED
 
 BUILD = BuildCommand()

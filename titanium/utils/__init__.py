@@ -131,6 +131,12 @@ def h(cmd: str, args: list[str], checkForLength: bool = True) -> bool:
         COMMANDS.display_command_help(cmd)
         return HANDLED
     return NOT_HANDLED
+def failableRun(cmd: str):
+    import os
+    res = os.system(cmd)
+    if res != 0:
+        LOG.log(COLORS.FAIL+"Failed to run command: "+COLORS.ENDC+cmd)
+        exit(res)
 COMMANDS = CommandGroup()
 LOG = Logger(print)
 
