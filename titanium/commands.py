@@ -30,7 +30,9 @@ class BuildCommand(Command):
             LOG.log(COLORS.OKCYAN + "Build Status:" + COLORS.ENDC + f""" Building for {COLORS.HEADER}{metadata.target.n()}{COLORS.ENDC} on {COLORS.HEADER}{metadata.triple}{COLORS.ENDC} in {COLORS.HEADER}{'release' if metadata.release else 'debug'}{COLORS.ENDC} mode.""")
             return HANDLED
         full_build = False
-        if "--full" in cliargs: full_build = True
+        if "full" in cliargs:
+            full_build = True
+            print("Full build requested! THIS WILL TAKE A WHILE!")
 
         def build_desktop(full_build: bool = False):
             config: list[str] = (
