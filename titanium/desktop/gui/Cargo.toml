@@ -20,7 +20,8 @@ package = "titanium_common"
 path = "../../common"
 
 [dependencies.druid]
-version = "0.8"
+git = "https://github.com/AtomicGamer9523/druid"
+# version = "0.8"
 features = [
     "image-all"
 ]
