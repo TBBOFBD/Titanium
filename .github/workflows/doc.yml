@@ -16,8 +16,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
-    name: Deploy to GitHub Pages
+  doc:
+    name: Doc and Deploy
     runs-on: ubuntu-latest
     environment:
       name: github-pages

@@ -5,14 +5,6 @@
 
 #![deny(missing_docs,missing_debug_implementations,unused,clippy::all)]
 
-// titaniumutils::warn!(
-//     all(
-//         feature = "desktop",
-//         feature = "web",
-//     ),
-//     "Both desktop and web features are enabled. This is not recommended."
-// );
-
 /// Web-related utilities
 /// 
 /// # Example
@@ -50,6 +42,12 @@ pub mod web {
 #[cfg(feature = "desktop")]
 pub mod desktop {
     pub use titaniumdesktop::*;
+}
+
+/// Common utilities for the Titanium project.
+#[cfg(feature = "core")]
+pub mod common {
+    pub use titaniumcommon::*;
 }
 
 #[cfg(feature = "macros")]

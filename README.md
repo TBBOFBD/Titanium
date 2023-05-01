@@ -21,8 +21,29 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<p align="center"><img src="./titanium/assets/icon.png"alt="titanium-logo"style="width:40%;height:5%px;object-fit:cover;object-position:center -10px""/></p><h1 align="center"></h1><p align="center"style="">A library for writing video game "utilities"</p><div align="center"><a><img src="https://img.shields.io/github/license/AtomicGamer9523/Titanium?label=License&color=blue"></a><br><a href="https://www.github.com/AtomicGamer9523"><img src="https://img.shields.io/github/followers/atomicgamer9523?label=AtomicGamer9523%20(Me)&style=social"/></a></div><br><h3><b>Obtaining</b>:</h3><samp>Mercurial: </samp><kbd>hg clone linkrbot.com/hg/titanium</kbd><br><samp>Git: </samp><kbd>git clone github.com/AtomicGamer9523/titanium</kbd>
+<p align="center"><img src="./titanium/assets/wallpaper-transparent.png"alt="titanium-logo"style="width:40%;object-fit:cover;object-position:center -10px""/></p><h1 align="center"></h1><p align="center"style="">A library for writing video game "mods"</p><div align="center">
+<a href="https://github.com/TBBOFBD/Titanium">
+<img src="https://img.shields.io/github/license/TBBOFBD/Titanium?label=License&color=blue"></a>
+<a href="https://github.com/TBBOFBD/Titanium">
+<img src="https://img.shields.io/github/actions/workflow/status/TBBOFBD/Titanium/check.yml?label=Build"></a>
+<a href="https://tbbofbd.github.io/Titanium/titanium/">
+<img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/TBBOFBD/Titanium/doc.yml?label=Docs"></a>
+</div>
 
-### **Examples**:
-#### [Web Game](./examples/web/main.rs)
-#### [Desktop Game](./examples/desktop/main.rs)
+### **Features**
+
+- **Cross Platform**
+- **Easy to use**
+- **Fast**
+- **Safe**
+- **Customizable**
+- **Open Source**
+
+### **Examples**
+
+- **[Desktop Gui](./examples/desktop_gui/)**
+- **[Desktop Memory Injecting](./examples/desktop_memory/)**
+- **[Desktop Discord Integration](./examples/desktop_discord/)**
+- **[Web Basic Game](./examples/web_basic/)**
+- **[JVM Basic Game](./examples/jvm_basic/)**
+- **[Any Platform Math](./examples/unknown_math/)**

@@ -10,20 +10,42 @@ path = "titanium/src/lib.rs"
 
 #?RESERVED_FOR_TITANIUM_FRAMEWORK_END
 
+[[example]]
+name = "desktop_discord"
+path = "examples/desktop_discord/main.rs"
+required-features = ["desktop-discord"]
+
+[[example]]
+name = "desktop_gui"
+path = "examples/desktop_gui/main.rs"
+required-features = ["desktop-gui"]
+
+[[example]]
+name = "desktop_memory"
+path = "examples/desktop_memory/main.rs"
+required-features = ["desktop-memory"]
+
+[[example]]
+name = "unknown_math"
+path = "examples/unknown_math/main.rs"
+
+[[example]]
+name = "web_basic"
+path = "examples/web_basic/main.rs"
+required-features = ["web-full"]
+
 [workspace]
 members = [
-    "titanium/assets",
-    "titanium/common",
-    "titanium/desktop",
-    "titanium/macros",
-    "titanium/utils",
-    "titanium/web",
-
-    #Examples
-    "examples/desktop_discord",
-    "examples/desktop_memory",
-    "examples/desktop_gui",
-    "examples/web",
+    "titanium/*",
+    "examples/*"
+]
+exclude = [
+    "titanium/__pycache__",
+    "titanium/scripts",
+    "titanium/config",
+    "titanium/src",
+    
+    "examples/jvm_basic",
 ]
 
 [dependencies.titaniummacros]
@@ -40,7 +62,7 @@ optional = true
 path = "./titanium/utils"
 package = "titanium_utils"
 default-features = false
-features = ["macros"]
+optional = true
 
 [dependencies.titaniumassets]
 path = "./titanium/assets"
@@ -63,11 +85,17 @@ package = "titanium_web"
 optional = true
 
 [features]
-default = ["basic"]
+default = ["core"]
 
-basic = ["macros", "core"]
-core = ["titaniumcommon", "titaniumassets"]
-macros = ["titaniummacros", "async-std"]
+# Utility Features
+core = ["common"]
+basic = ["macros", "core", "assets"]
+macros = ["titaniummacros", "async-std", "titaniumutils/macros"]
+assets = ["titaniumassets", "titaniumutils/assets"]
+
+# Platform Common Features
+common = ["titaniumcommon"]
+common-less-memory = ["common", "titaniumcommon/less-memory"]
 
 # Desktop Target
 desktop = ["titaniumdesktop"]

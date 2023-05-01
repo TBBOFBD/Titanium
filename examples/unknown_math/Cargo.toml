@@ -1,0 +1,17 @@
+[package]
+name = "unknown_math"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "unknown_math"
+path = "main.rs"
+
+[dependencies.titanium]
+path = "../../"
+features = [
+    "common-less-memory",
+]
+
+[dependencies]
+# add your dependencies here
