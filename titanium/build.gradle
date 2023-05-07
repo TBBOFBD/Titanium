@@ -1,14 +1,10 @@
 plugins {
     id 'java'
-    id 'application'
     id 'java-library'
+    id 'maven-publish'
 }
 
 project.buildDir = '../.build/java'
-
-application {
-    mainClass = 'main.Main'
-}
 
 compileJava {
     options.encoding = 'UTF-8'
@@ -22,4 +18,17 @@ repositories {
 dependencies {
     implementation "org.slf4j:slf4j-api:${project.slf4j_version}"
     implementation "ch.qos.logback:logback-classic:${project.logback_version}"
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/octocat/hello-world"
+            credentials {
+            username = System.getenv("GITHUB_ACTOR")
+            password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
 }

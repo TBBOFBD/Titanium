@@ -38,6 +38,8 @@ jobs:
         run: python x.py installDeps
       - name: Doc
         run: cargo doc --workspace --no-deps
+      - name: Move Index File
+        run: mv ./index.html ./.build/rust/doc/index.html
       - name: Setup Pages
         uses: actions/configure-pages@v2
       - name: Upload artifact
